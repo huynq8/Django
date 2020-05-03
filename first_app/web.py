@@ -1,7 +1,7 @@
 import re
 from collections import OrderedDict
 import collections as col
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from re import *
 from netaddr import *
 #from first_app.move_vlan import *
@@ -87,7 +87,7 @@ def top_hit(file1):
             lst_policy.append(dict_sort[key]['term'])
             lst_hit.append(dict_sort[key]['value'])
             n+=1
-    plt.hist(lst_hit, bins=10, edgecolor='r')
+    '''plt.hist(lst_hit, bins=10, edgecolor='r')
     plt.show()
     plt.clf()
 
@@ -105,7 +105,7 @@ def top_hit(file1):
     plt.title('top hitcount')
     #plt.plot(lst_policy,lst_hit)
     plt.tight_layout()
-    plt.show()
+    plt.show()'''
     #print(dict_sort)
     return dict_sort
     # Iterate over the sorted sequence
