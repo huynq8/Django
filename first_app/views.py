@@ -118,7 +118,10 @@ def resultsearchrule(request, id=None):
         str_text = ''
         for line in uploaded_file:
             str_text = str_text + line.decode()  # "str_text" will be of `str` type
-        dict_file.update([(str(request.FILES['file']),str_text)])
+        file_name_upload = str(request.FILES['file'])
+        with open(file_name_upload,'w') as f:
+            f.write(str_text)
+        dict_file.update([(str(request.FILES['file']),file_name_upload)])
     # do something
     elif request.method == "POST":
         response_data={'result':{}}
@@ -133,9 +136,9 @@ def resultsearchrule(request, id=None):
         else:
             print(fromJs['content'])
             #reg = web.list_regular(fromJs['content'])
-            for list_config in dict_file:
-                file_name = list_config
-                list_command = dict_file[list_config].splitlines()
+            for name in dict_file:
+                file_name = name
+                list_command = open(file_name,'r').readlines()
                 list_ip = fromJs['content']
                 #print(list_command)
                 result_func = web.search_rule(file_name,list_command,list_ip)
