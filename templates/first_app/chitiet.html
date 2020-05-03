@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "first_app/base.html" %}
+{% block block_body %}
+{% load staticfiles %}
+ 
+<!--div tổng page -->
+ <!-- Page Features -->
+      <div class="row text-center">
+		{% if product %} 		
+        <div class="container">
+          <div class="card" align="center">
+            <img class="img-responsive" src="{{product.image.url}}" alt="{{product.name}}" width="350" height="350"/>            
+            <div class="card-body">
+              <h4 class="card-title">{{product.name}}</h4>
+              <p class="card-text">{{product.description}}<br/>{{product.fee}} vnđ</p>
+            </div>           
+          	<div>          
+          		<form action="{% url 'cart_add' product.pk%}" method="post">  
+					{{cart_product_form}}
+          			{% csrf_token %}
+          			 <div class="card-footer" >
+          			 <input type="submit" value = "Thêm vào giỏ hàng" class="btn btn-primary">              		
+            		</div>
+          		</form>
+          	</div>
+          </div>
+          
+        </div>       
+        {% endif%}      
+      </div>	
+{% endblock %}

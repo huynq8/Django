@@ -1,0 +1,28 @@
+<style>
+    .btn-link {
+        border: none;
+        outline: none;
+        background: none;
+        cursor: pointer;
+        color: #0000EE;
+        padding: 0;
+        text-decoration: underline;
+        font-family: inherit;
+        font-size: inherit;
+    }
+</style>
+{% for file in result %}
+<div>
+    <button type="submit" onclick="reply_click(this.id)" name="content" id={{file}} value={{file}}
+        class="btn-link">{{file}}</button>
+</div>
+<script>
+    function reply_click(click_id) {
+        $('#filelist').empty();
+        //$('#filelist').append(click_id);    
+        document.getElementById('filelist').innerHTML += '<textarea readonly style="width: 500px; border: none;margin-top:20px;" id="file">'+click_id+"</textarea>"
+        //$("#output").val(click_id);
+    }
+
+</script>
+{% endfor %}

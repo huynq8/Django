@@ -1,0 +1,2208 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load filter_tags %}
+
+{% block title %}DC Portal - NOC Utilities - Remove ACL Hitcount{% endblock  %}
+{% block custome-css-file %}
+ <!-- Footable CSS -->
+ <link href="{% static 'plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+ <link href="{% static 'plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+ <link href="{% static 'css/material_checkbox.css' %}" rel="stylesheet">
+
+{% endblock custome-css-file %}
+{% block custome-style %}
+<style rel="stylesheet" type="text/css">
+    .table>tbody>tr>td {
+        padding: 3px;
+        vertical-align: middle;
+        text-align:center;
+        /* font-size: 0.96em; */
+    }
+    .table>thead>tr>th {
+        padding: 3px;
+        vertical-align: middle;
+        /* white-space: nowrap; */
+        /* padding: 15px 8px; */
+    }
+    .table>tbody>tr {
+        height: 32px;
+    }
+    .table>thead>tr>th {
+        text-align: center;
+    }
+    .table.dataTable thead th, table.dataTable thead td {
+        border-bottom: none;
+    }
+    .std-rule-table thead .filter-row > th, .nf-rule-table thead .filter-row > th{
+        color: #797979!important;
+        background-color: #fff!important;
+    }
+    #btn-kickoff b{
+        font-size: 1.5em;
+        line-height: 2em;
+        /* padding: 10px; */
+        margin-bottom: 30px;
+    }
+    .white-box>.text-center{
+        margin-bottom: 5px;
+    }
+    .form-label{
+        padding-top: 3px;
+    }
+    .form-label-detail{
+        font-weight: 300;
+    }
+    #show_entries {
+        border-radius: 15px;
+        padding-left: 10px;
+        border-color: rgb(169, 169, 169);
+        margin: 0px 5px;
+        height: 25px;
+    }
+    .over-x-box{
+        overflow-x: auto;
+        max-width: 100%; 
+    }
+    #btn-retry{
+        /* font-size: 1em; */
+        /* padding: .5rem .75rem; */
+        width: 25px;
+        height: 25px;
+        padding: 5px;
+        border-radius: 50%;
+        margin: 0 10px;
+    }
+    #btn-retry b  i{
+        font-weight: 900;
+    }
+    #table_ticket_list>thead>tr>th {
+        white-space: nowrap;
+        padding: 15px 8px;
+    }
+    /* #std-rule-table{
+        width: 100%;
+    } */
+    .std-rule-table, .nf-rule-table{
+        border-collapse: collapse !important;
+    }
+    .std-table-wrapper, .nf-table-wrapper{
+        margin-top: 10px;
+    }
+    .footable-row-detail-inner {
+    display: table;  
+    width: 100%;
+    }
+    .button-container{
+        margin-top: 5px;
+        height: 35px;
+    }
+    .my-checkbox{
+        font-size: 1px;
+    }
+    .checkbox-btn{
+        border: none;
+        padding: 5px 3px;
+    }
+    .checkbox-btn label.my-checkbox{
+        left: 7px;
+    }
+    .checkbox-btn + .dropdown-toggle-split{
+        border:none;
+    }
+    .dropdown-checkbox {
+        min-width: 100px;
+    }
+    .checkbox-col{
+        width: 1%;
+        white-space: nowrap;
+    }
+    .modal-body .column-step div.step-title{
+        font-size: 1em;
+    }
+    .phase-detail{
+        font-size: 0.9em;
+    }
+    .cell-ticketid{
+        text-align: left!important;
+        white-space: nowrap;
+    }
+    .cell-action {
+        white-space: nowrap;
+    }
+    .cell-action .row .col-md-4, .cell-action .row .col-sm-4{
+        display: inline-block;
+        float: none;
+    }
+    #ticket-progress{
+        height: 15px;
+        border-radius: 4px;
+
+    }
+    .progress-wrapper{
+        padding-top: 4px;
+    }
+    tr.footable-row-detail .footable-row-detail-name{
+        width: 10%;
+    }
+
+    /* FILTER SECTION */
+    #search-bar .form-control:hover, #search-bar .form-control:focus{
+        box-shadow: inset 0 .5px .5px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+        border-color: rgba(82, 168, 236, 0.8)
+    }
+    #search-bar .search-query{
+        border-radius: 4px;
+        z-index: auto !important;
+    }
+    #search-bar .search-query:hover{
+        z-index: auto;
+    }
+    #search-bar .btn-search{
+        border: 0;
+        background: none;
+        position: relative;
+        left: -30px;
+        border-radius: 4px;
+        padding: .5rem .75rem;
+    }
+    #search-bar .column-selector{
+        border-radius: 4px;
+        /* margin-right: 20px; */
+        padding-top: 5px;
+        width: 100%;
+    }
+    #search-bar #filter-btn{
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    #search-bar #filter-btn b{
+        font-size: 1.2em;
+    }
+    #search-bar #filter-btn:hover{
+        color: #3498db;
+    }
+    .search-query:focus + button{
+        z-index: 3;
+    }
+    .flex-div{
+        display:flex;
+    }
+    @media (min-width: 992px){
+        .filter-wrapper{
+            margin-top: -35px;
+        }
+    }
+    .nopad{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #clear-filter{
+        color: #e74c3c;
+        font-weight: 500;
+    }
+    #filter-dropdown .dropdown-header{
+        font-weight: 500;
+    }
+    #filter-dropdown{
+        padding: 15px 0 5px;
+        min-width: fit-content;
+        width: 200px;
+    }
+    #filter-dropdown .filter-action button{
+        border-radius: 3px;
+        font-weight: 500;
+    }
+    #filter-dropdown .filter-action{
+        margin-top: 4px;
+    }
+    #btn_apply{
+        background-color: #2980b9;
+        color: #fff;
+    }
+    #btn_cancel{
+        color: #2c3e50;
+    }
+</style>
+{% endblock custome-style %}
+
+{% block content %}
+<div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Remove ACL Hitcount Request Detail</h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li>NOC Utilities</li>
+                <li>Remove ACL Hitcount</li>
+                <li class="active"><b>Request Detail</b></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">REQUEST DETAIL</h3>
+                <div class="form-group row">
+                    <label for="request-id" class="col-md-2 col-sm-4 col-form-label text-right pull-left-xs">Request ID:</label>
+                    <div class="col-md-2 col-sm-8 form-label">
+                        <span id="request-id" class="label label-megna label-rounded">{{ processing_request.request_id }}</span>
+                    </div>
+                    <label class="col-md-2 col-sm-4 col-form-label text-right pull-left-xs">Status:</label>
+                    <div id="request-status" class="col-md-2 col-sm-8 form-label">
+                            {% if processing_request.status == 'PROCESSING' %}
+                            <span class="label label-megna label-rounded">PROCESSING</span>
+                            {% elif processing_request.status == 'OPEN' %}
+                            <span class="label label-info label-rounded">OPEN</span>
+                            {% else %}
+                            <span class="label label-success label-rounded">FINISHED</span>
+                            {% endif %}
+                    </div>
+                    <label for="activator" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Activator:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="activator" class = "col-form-label col-form-label-detail">{{ processing_request.activator }}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+
+                    <label for="start-date" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Start Date:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="start-date" class = "col-form-label col-form-label-detail">{{ processing_request.start_time }}</label>
+                    </div>
+                    <label for="end-date" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> End Date:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="end-date" class = "col-form-label col-form-label-detail">{{ processing_request.end_time }}</label>
+                    </div>
+                    
+                </div>
+                <div class="form-group row">
+                    <label for="total-std-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Total Standard Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-std-rule" class = "col-form-label col-form-label-detail">{{ processing_request.total_std_rule }}</label>
+                    </div>
+                    <label for="total-nf-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Total No Format Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-nf-rule" class = "col-form-label col-form-label-detail">{{ processing_request.total_nf_rule }}</label>
+                    </div>
+                    <label for="total-failed-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Failed Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-failed-rule" class = "col-form-label col-form-label-detail" style="color:orangered">{{ processing_request.failed_rules }}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="total-remove-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Remove Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-remove-rule" class = "col-form-label col-form-label-detail">{{ processing_request.remove_rules }}</label>
+                    </div>
+                    <label for="total-keep-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Keep Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-keep-rule" class = "col-form-label col-form-label-detail">{{ processing_request.keep_rules }}</label>
+                    </div>
+                    <label for="total-disabled-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs"> Disabled Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-disabled-rule" class = "col-form-label col-form-label-detail">{{ processing_request.disabled_rules }}</label>
+                    </div>
+                    <!-- <label for="total-failed-rule" class = "col-md-1 col-sm-4 col-form-label text-right pull-left-xs"> Failed Rules:</label>
+                    <div class="col-md-2 col-sm-8">
+                        <label id="total-failed-rule" class = "col-form-label col-form-label-detail">{{ processing_request.total_failed_rules }}</label>
+                    </div> -->
+                </div>
+                <div class="form-group row">
+                    <label for="total-failed-rule" class = "col-md-2 col-sm-4 col-form-label text-right pull-left-xs" > Progress:</label>
+                    <div class="col-md-8 col-sm-8 progress-wrapper">
+                        <!-- <label id="total-failed-rule" class = "col-form-label col-form-label-detail">{{ processing_request.total_failed_rules }}</label> -->
+                        <div class="progress" id="ticket-progress" data-toggle="tooltip"  data-original-title="Total tickets: {{ processing_request.total_ticket }}" data-placement="bottom">
+                            <div id="finished-progress" class="progress-bar progress-bar-success progress-bar-striped active align-middle" data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Finished tickets: {{ processing_request.finished_tickets }}/{{ processing_request.total_ticket }}" data-animation="false" style="width: {{ progress_info.finished_tickets }}%" >
+                                {% if progress_info.finished_tickets %}  
+                                <span class="align-middle">{{ progress_info.finished_tickets }}%</span>
+                                {% endif %}
+                            </div>
+                                <div id="processing-progress" class="progress-bar progress-bar-megna" data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Processing tickets: {{ processing_request.processing_tickets }}/{{ processing_request.total_ticket }}" data-animation="false" style="width: {{ progress_info.processing_tickets }}%" >
+                                {% if progress_info.processing_tickets %}
+                                <span class="align-middle">{{ progress_info.processing_tickets }}%</span>
+                                {% endif %}
+                            </div>
+                                <div id="waiting-noc-progress" class="progress-bar progress-bar-info" data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Waiting NOC tickets: {{ processing_request.waiting_noc_tickets }}/{{ processing_request.total_ticket }}" data-animation="false" style="width: {{ progress_info.waiting_noc_tickets }}%">
+                                {% if progress_info.waiting_noc_tickets %}
+                                <span class="align-middle">{{ progress_info.waiting_noc_tickets }}%</span>
+                                {% endif %}
+                            </div>
+                                <div id="failed-progress" class="progress-bar progress-bar-warning" data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Failed tickets: {{ processing_request.failed_tickets }}/{{ processing_request.total_ticket }}" data-animation="false" style="width: {{ progress_info.failed_tickets }}%">
+                                {% if progress_info.failed_tickets %}
+                                <span class="align-middle">{{ progress_info.failed_tickets }}%</span>
+                                {% endif %}
+                            </div>
+                                <div id="rejected-progress" class="progress-bar progress-bar-danger" data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Rejected tickets: {{ processing_request.rejected_tickets }}/{{ processing_request.total_ticket }}" data-animation="false" style="width: {{ progress_info.rejected_tickets }}%">
+                                {% if progress_info.rejected_tickets %}
+                                <span class="align-middle">{{ progress_info.rejected_tickets }}%</span>
+                                {% endif %}
+                            </div>
+                            <span class="sr-only" id="total_ticket" hidden>{{ processing_request.total_ticket }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="white-box">
+                <h3 class="box-title">TICKET LIST</h3>
+                <div class="row justify-content-center text-center button-container">
+                        <div class="col-md-4 text-center">
+
+                        </div>
+                  </div>
+                  <div class="row justify-content-end">
+                      <div class="col-md-4 filter-wrapper">
+                          <div class="input-group" id="search-bar">
+
+                            <div class="col-md-4 col-sm-5 nopad">
+                                <select class="form-control column-selector">
+                                        <option selected value="0">--All--</option>
+                                        <option value="1">Ticket ID</option>
+                                        <option value="2">Phase</option>
+                                        <option value="3">Status</option>
+                                        <option value="4">Des. VLAN</option>
+                                        <option value="5">Executor</option>
+                                        <option value="6">Tracking ID</option>
+                                        <option value="7">Rules Count</option>
+                                    </select>
+                            </div>
+                            <div class="col-md-1 col-sm-2 nopad btn-filter-wrapper">
+                                <div class="dropdown">
+                                    <button type="button" class="btn form-control" id="filter-btn" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                        <b><i class="ti-panel"></i></b><span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu funkyradio" id="filter-dropdown">
+                                      </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-sm-5">
+                                <div class="flex-div">
+                                        <input type="text" name="search" class="form-control search-query" id="tk_search" placeholder="Search for...">
+                                        <button class="btn btn-search"><b><i class="icon-magnifier"></i></b></button>            
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                <div class="table-responsive over-x-box">
+                    <table id="table_ticket_list" class="table toggle-arrow-tiny table-hover" data-limit-navigation="4" data-filter="#tk_search">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" data-sortable="false" data-sort-ignore="true" class="checkbox-col">
+                                    <!-- <label class="material-checkbox my-checkbox">
+                                            <input type="checkbox" id="check-all">
+                                            <span></span>
+                                    </label> -->
+                                    <div class="btn-group">
+                                        <button class="btn btn-secondary btn-sm checkbox-btn" type="button">
+                                            <label class="material-checkbox my-checkbox">
+                                                <input type="checkbox" id="check-all">
+                                                <span></span>
+                                        </label>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <span class="sr-only"></span>
+                                        </button>
+                                        <div class="dropdown-menu text-center dropdown-checkbox">
+                                            <a class="dropdown-item" id="select-all" href="#">All</a>
+                                            <a class="dropdown-item" id="select-failed" href="#">Failed</a>
+                                            <a class="dropdown-item" id="select-waiting" href="#">Waiting</a>
+                                            <a class="dropdown-item" id="select-accepted" href="#">Accepted</a>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th rowspan="2" data-toggle="true" style="width:10%">TICKET ID</th>
+                                <th rowspan="2" style = "width:15%">PHASE</th>
+                                <th rowspan="2" style = "width:10%" >STATUS</th>
+                                <th rowspan="2" style = "width:10%">DES. VLAN</th>
+                                <th rowspan="2" style = "width:10%">EXECUTOR</th>
+                                <th rowspan="2" >TRACKING ID</th>
+                                <th rowspan="2" style = "width:10%">RULES COUNT</th>
+                                <th rowspan="2" style = "width: 12%;" data-sortable="false" data-sort-ignore="true">ACTION</th>
+                                <th data-hide="all" id="rule-type" style="width: 10%">GETTING RULES...</th>
+                                {% comment %}
+                                {% if ticket.has_nf_rule == 0 %}
+                                <th data-hide="all">STANDARD RULES</th>
+                                {% else %}
+                                <th data-hide="all">NO FORMAT RULES</th>
+                                {% endif %}
+                                {% endcomment %}
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            
+                            {% if list_processing_tickets %}
+                                {% for ticket in list_processing_tickets %}
+                            <tr class="ticket-row">
+                                <td>
+                                    <label class="material-checkbox my-checkbox">
+                                            <input type="checkbox" class="check-one">
+                                            <span></span>
+                                    </label>
+                                </td>
+                                <td class="cell-ticketid"><span>{{ ticket.ticket_id }}</span></td>
+                                <td class="cell-phase">
+                                    {% if ticket.phase == 'SESSION CHECK' %}
+                                        <span class="label label-warning label-rounded">SESSION CHECK</span>
+                                    {% elif ticket.phase == 'WAITING OWNER' %}
+                                        <span class="label label-primary label-rounded">WAITING OWNER</span>
+                                    {% elif ticket.phase == 'WAITING NOC' %}
+                                        <span class="label label-info label-rounded">WAITING NOC</span>
+                                    {% else %}
+                                        <span class="label label-success label-rounded">PROCESSING</span>
+                                    {% endif %}
+                                </td>
+                                <td class="cell-status">
+                                        {% if ticket.status == 'FAILED' %}
+                                        <span class="label label-danger label-rounded">FAILED</span>
+                                        {% elif ticket.status == 'REJECTED' %}
+                                        <span class="label label-danger label-rounded">REJECTED</span>
+                                        {% elif ticket.status == 'ACCEPTED' %}
+                                        <span class="label label-info label-rounded">ACCEPTED</span>
+                                        {% elif ticket.status == 'WAITING' %}
+                                        <span class="label label-megna label-rounded">WAITING</span>
+                                        {% elif ticket.status == 'PROCESSING' %}
+                                        <span class="label label-info label-rounded">PROCESSING</span>
+                                        {% else %}
+                                        <span class="label label-success label-rounded">FINISHED</span>
+                                        {% endif %}
+                                </td>
+                                <td class="cell-vlan-id">{{ ticket.vlan_id }}</td>
+                                <td class="cell-executor">{{ ticket.executor }}</td>
+                                {% if ticket.tracking_id %}
+                                    <td class="cell-trackingid">
+                                        <a href="{{ticket.tracking_id}}" target="_blank">{{ ticket.tracking_num }}</a>
+                                    </td>
+                                {% else %}
+                                    <td class="cell-trackingid">{{ ticket.tracking_id }}</td>
+                                {% endif %}
+                                <td class="cell-rules-count">{{ ticket.rule_number }}</td>
+                                <td class="cell-action" >
+                                    <div class = "row justify-content-end align-items-center">
+                                        <div class="col-md-4 col-sm-4 history-wrapper" data-toggle="tooltip" data-original-title="Ticket History" data-animation="false">
+                                            <button id="btn-retry" class="btn btn-success waves-effect waves-light btn-rounded btn-outline" data-toggle="modal" data-target="#ticket_history_modal_{{forloop.counter}}">
+                                                    <b><i class="icon-notebook"></i></b>
+                                            </button>
+                                            <div id="ticket_history_modal_{{forloop.counter}}" class="modal history-modal fade" tabindex="-1" role="dialog" aria-labelledby="ticket_history_modal" aria-hidden="true" >
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h4 class="modal-title"><i class="icon-notebook"> </i> TICKET HISTORY</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="table-responsive">
+                                                                    <table class="table table-bordered table-striped table-ticket-history">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>NO.</th>
+                                                                                <th>TIME</th>
+                                                                                <th>ACTOR</th>
+                                                                                <th>PHASE</th>
+                                                                                <th>STATUS</th>
+                                                                                <th>ACTION</th>
+                                                                                <th>DESCRIPTION</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {% for row in ticket.list_history %}
+                                                                            <tr>
+                                                                                    <td class="txt-oflo text-center">{{ forloop.counter }}</td>
+                                                                                    <td class="txt-oflo text-center">{{ row.timestamp }}</td>
+                                                                                    <td class="txt-oflo text-center">{{ row.actor }}</td>
+                                                                                    <td class="txt-oflo text-center">{{ row.status }}</td>
+                                                                                    <td class="txt-oflo text-center">{{ row.phase }}</td>
+                                                                                    <td class="txt-oflo text-center">{{ row.action }}</td>
+                                                                                    <td class="txt-oflo" style="text-align:left">{{ row.description }}</td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger btn-rounded waves-effect text-left" data-dismiss="modal"><b>CLOSE</b></button>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 workflow-wrapper" data-toggle="tooltip" data-original-title="Show workflow" data-animation="false">
+                                                <button id="btn-retry" class="btn btn-info waves-effect waves-light btn-rounded btn-outline btn-workflow" data-toggle="modal" data-target="#ticket_workflow_modal_{{forloop.counter}}">
+                                                        <b><i class="icon-graph"></i></b>
+                                                </button>
+                                                <div id="ticket_workflow_modal_{{forloop.counter}}" class="modal fade workflow-modal" tabindex="-1" role="dialog" aria-labelledby="ticket_workflow_modal" aria-hidden="true" >
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h4 class="modal-title"><i class="icon-graph"> </i> TICKET WORKFLOW</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                {% comment %}
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row line-steps">
+                                                                                <div class="col-md-1"></div>
+                                                                                <div class="col-md-2 column-step start">
+                                                                                        <div class="step-number"><i class="icon-share-alt"></i></div>
+                                                                                        <div class="step-title">Query Data</div>
+                                                                                        <br>
+                                                                                        <div><span class="label label-info label-rounded">RETRIEVED DATA</span></div>
+                                                                                        <div class="phase-detail">{{ ticket.workflow.query_data.timestamp }}</div>
+                                                                                </div>
+                                                                                {% if ticket.phase == 'SESSION CHECK' %}
+                                                                                    {% if ticket.status == 'WAITING' %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                                <div class="step-number"><i class="icon-energy"></i></div>
+                                                                                                <div class="step-title">First session check</div>
+                                                                                                <br>
+                                                                                                <div><span class="label label-warning label-rounded">CHECKING</span></div>
+                                                                                        </div>
+                                                                                        <!-- If status is FAILED -->
+                                                                                    {% else %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                                <div class="step-number"><i class="icon-energy"></i></div>
+                                                                                                <div class="step-title">First session check</div>
+                                                                                                <br>
+                                                                                                <div><span class="label label-danger label-rounded">FAILED</span></div>
+                                                                                                <div class="phase-detail">{{ ticket.workflow.session_check.timestamp }}</div>
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> Owner confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING CONFIRM</span></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING CONFIRM</span></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING</span></div>
+                                                                                        </div>
+                                                                                {% elif ticket.phase == 'WAITING OWNER' %}
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-energy"></i></div>
+                                                                                            <div class="step-title">First session check</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded">SUCCESS</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.session_check.timestamp }}</div>
+                                                                                        </div>
+                                                                                    {% if ticket.status == 'WAITING' %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> Owner confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" >WAITING CONFIRM</span></div>
+                                                                                        </div>
+                                                                                    {% else %}
+                                                                                        <!-- Accepted -->
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> Owner confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded" >ACCEPTED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.actor }}</div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.timestamp }}</div>
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded" style="background:#a5a7a9">WAITING CONFIRM</span></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING</span></div>
+                                                                                        </div>
+                                                                                {% elif ticket.phase == 'WAITING NOC' %}
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-energy"></i></div>
+                                                                                            <div class="step-title">First session check</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded">SUCCESS</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.session_check.timestamp }}</div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> Owner confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded" >ACCEPTED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.actor }}</div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.timestamp }}</div>
+                                                                                        </div>
+                                                                                    {% if ticket.status == 'WAITING' %}
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded">WAITING CONFIRM</span></div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING</span></div>
+                                                                                        </div>
+                                                                                    {% elif ticket.status == 'ACCEPTED' %}
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded">ACCEPTED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.noc_confirm.actor }}</div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.noc_confirm.timestamp }}</div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" style="background:#a5a7a9">WAITING</span></div>
+                                                                                        </div>
+                                                                                    {% else %}
+                                                                                    <!-- Rejected -->
+                                                                                        <div class="col-md-2 column-step inactive">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-danger label-rounded">REJECTED</span></div>
+                                                                                        </div>  
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>                                
+                                                                                            <div><i class="icon-close" style="color:red; font-size:2em"></i></div>
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                
+                                                                                {% else %}
+                                                                                    <!-- Phase Processing -->
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-energy"></i></div>
+                                                                                            <div class="step-title">First session check</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded">SUCCESS</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.session_check.timestamp }}</div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> Owner confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded" >ACCEPTED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.actor }}</div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.owner_confirm.timestamp }}</div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 column-step upcoming">
+                                                                                            <div class="step-number"><i class="icon-user-following"></i></div>
+                                                                                            <div class="step-title"> NOC confirm</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-info label-rounded">ACCEPTED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.noc_confirm.actor }}</div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.noc_confirm.timestamp }}</div>
+                                                                                        </div>
+                                                                                        
+                                                                                    {% if ticket.status == 'WAITING' %}
+                                                                                        <div class="col-md-2 column-step inactive finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#686868"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-warning label-rounded" >PROCESSING</span></div>
+                                                                                        </div>
+                                                                                    {% else %}
+                                                                                        <!-- status Finished -->
+                                                                                        <div class="col-md-2 column-step upcoming finish">
+                                                                                            <div class="step-number"><i class="icon-flag" style="color:#03a9f3"></i></div>
+                                                                                            <div class="step-title">Finish</div>
+                                                                                            <br>
+                                                                                            <div><span class="label label-success label-rounded" >FINISHED</span></div>
+                                                                                            <div class="phase-detail">{{ ticket.workflow.process.timestamp }}</div>
+                                                                                        </div>
+
+                                                                                    {% endif %}
+                                                                                {% endif %}
+                                                                                        <!-- <div class="col-md-1"></div> -->
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                                {% endcomment %}
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger btn-rounded waves-effect text-left" data-dismiss="modal"><b>CLOSE</b></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 retry-wrapper">
+                                        {% if ticket.phase == 'SESSION CHECK' and ticket.status == 'FAILED' %}
+                                            {% if 'NOC' in request.user.domain|get_group %}
+                                            <button id="btn-retry" class="btn btn-warning waves-effect waves-light btn-rounded btn-outline" data-toggle="tooltip" data-original-title="Retry">
+                                                    <b><i class="icon-reload"></i></b>
+                                            </button>
+                                            {% endif %}
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                {% if ticket.has_nf_rule == 0 %}
+                                <td data-visible="false" class="cell-rules">
+                                    <div class="table-responsive std-table-wrapper">
+                                    <table data-sorting="false" class="table table-bordered table-striped toggle-circle color-table muted-table std-rule-table">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="3">ID TICKET</th>
+                                                <th rowspan="3">CODE TICKET</th>
+                                                <th rowspan="3">SESSION COUNT</th>
+                                                <th rowspan="3">STATUS</th>
+                                                <th rowspan="3">USER REQUEST</th>
+                                                <th rowspan="3">TERM NAME</th>
+                                                <th rowspan="3">FROM ZONE</th>
+                                                <th rowspan="3">TO ZONE</th>
+                                                <th colspan="10">RULE SPECS</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="5">SRC.</th>
+                                                <th colspan="5">DES.</th>
+                                            </tr>
+                                            <tr>
+                                                    <th>LOCATION</th>
+                                                    <th>PRODUCT</th>
+                                                    <th>VLAN</th>
+                                                    <th>IP</th>
+                                                    <th>PORT</th>
+                                                    <th>LOCATION</th>
+                                                    <th>PRODUCT</th>
+                                                    <th>VLAN</th>
+                                                    <th>IP</th>
+                                                    <th>PORT</th>
+                                            </tr>
+                                            
+                                            <!-- Select Filter -->
+                                            <tr class="filter-row">
+                                                <th></th>
+                                                <th></th>
+                                                <th>SESSION COUNT</th>
+                                                <th>STATUS</th>
+                                                <th>USER REQUEST</th>
+                                                <th></th>
+                                                <th>FROM ZONE</th>
+                                                <th>TO ZONE</th>
+                                                <th>LOCATION</th>
+                                                <th>PRODUCT</th>
+                                                <th>VLAN</th>
+                                                <th>IP</th>
+                                                <th>PORT</th>
+                                                <th>LOCATION</th>
+                                                <th>PRODUCT</th>
+                                                <th>VLAN</th>
+                                                <th>IP</th>
+                                                <th>PORT</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            {% comment %}
+                                            {% if ticket.std_rule %}
+                                                {% for rule in ticket.std_rule %}
+                                                    <tr>
+                                                        <td>{{ rule.id_tk }}</td>
+                                                        <td>{{ rule.code_ticket }}</td>
+                                                        <td>{{ rule.session_count }}</td>
+                                                        <td>
+                                                        {% if rule.status == 'WAITING' %}
+                                                            <span class="label label-megna label-rounded">WAITING</span>
+                                                            <!-- {#{{ rule.status }}#} -->
+                                                        {% elif rule.status == 'REMOVE' %}
+                                                            <span class="label label-warning label-rounded">REMOVE</span>
+                                                        {% else %}
+                                                            <span class="label label-success label-rounded">KEEP</span>                                                            
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{ rule.user_request }}</td>
+                                                        <td>{{ rule.term_name }}</td>
+                                                        <td>{{ rule.from_zone }}</td>
+                                                        <td>{{ rule.to_zone }}</td>
+                                                        <td>{{ rule.source_location }}</td>
+                                                        <td>{{ rule.source_prod }}</td>
+                                                        <td>{{ rule.source_vlan }}</td>
+                                                        <td>{{ rule.source_ip }}</td>
+                                                        <td>{{ rule.source_port }}</td>
+                                                        <td>{{ rule.des_location}}</td>
+                                                        <td>{{ rule.des_prod}}</td>
+                                                        <td>{{ rule.des_vlan}}</td>
+                                                        <td>{{ rule.des_ip}}</td>
+                                                        <td>{{ rule.des_port}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% endcomment %}
+                                        </tbody>
+                                        <!-- <tfoot>
+                                            <tr>
+                                                <th>ID TICKET</th>
+                                                <th>CODE TICKET</th>
+                                                <th>SESSION COUNT</th>
+                                                <th>STATUS</th>
+                                                <th>USER REQUEST</th>
+                                                <th>TERM NAME</th>
+                                                <th>FROM ZONE</th>
+                                                <th>TO ZONE</th>
+                                                <th>LOCATION</th>
+                                                <th>PRODUCT</th>
+                                                <th>VLAN</th>
+                                                <th>IP</th>
+                                                <th>PORT</th>
+                                                <th>LOCATION</th>
+                                                <th>PRODUCT</th>
+                                                <th>VLAN</th>
+                                                <th>IP</th>
+                                                <th>PORT</th>
+                                            </tr>
+                                        </tfoot> -->
+                                    </table>
+                                    </div>
+                                </td>
+                                {% else %}
+                                <td data-visible="false" class="cell-rules">
+                                    <div class="table-responsive nf-table-wrapper">
+                                            <table class="table table-bordered table-striped toggle-circle color-table muted-table nf-rule-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>TERM NAME</th>
+                                                            <th>FROM ZONE</th>
+                                                            <th>TO ZONE</th>
+                                                            <th>SRC. DEVICE</th>
+                                                            <th>DES. DEVICE</th>
+                                                            <th>STATUS</th>
+                                                        </tr>
+
+                                                        <!-- Select filter -->
+                                                        <tr class="filter-row">
+                                                            <th></th>
+                                                            <th>FROM ZONE</th>
+                                                            <th>TO ZONE</th>
+                                                            <th>SRC. DEVICE</th>
+                                                            <th>DES. DEVICE</th>
+                                                            <th>STATUS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% comment %}
+                                                            {% if ticket.nf_rule %}
+                                                                {% for rule in ticket.nf_rule %}
+                                                                    <tr>
+                                                                        <td>{{ rule.term_name }}</td>
+                                                                        <td>{{ rule.from_zone }}</td>
+                                                                        <td>{{ rule.to_zone }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endcomment %}
+                                                    </tbody>    
+                                                    </table>
+                                    </div>
+                                        
+                                </td>
+                                {% endif %}
+                            </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td class="text-center" colspan="9"><i>No tickets available</i></td>
+                            </tr>
+                            {% endif %}
+                        
+                        </tbody>
+                        <tfoot >
+                                <tr>
+                                    <td colspan=3>
+                                        <label class="form-inline">Show
+                                            <select id="show_entries" class="form-control input-sm">
+                                                <option value="20">20</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            entries </label>
+                                    </td>
+                                    <td colspan=7>
+                                        <div class="text-right">
+                                            <ul class="pagination pagination-split">
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="white-box">
+                <h3 class="box-title">REQUEST HISTORY</h3>
+                <div class="table-responsive">
+                    <table id="table_request_history" class="table table-bordered table-striped toggle-circle color-table muted-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NO.</th>
+                                <th class="text-center">TIME</th>
+                                <th class="text-center">EXECUTOR</th>
+                                <th class="text-center">PHASE</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                                <th class="text-center" style="width:50%;">DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for row in req_history %}
+                            <tr>
+                                <td class="txt-oflo text-center">{{ forloop.counter }}</td>
+                                <td class="txt-oflo text-center">{{ row.time | date:'d/m/Y H:i:s' }}</td>
+                                <td class="txt-oflo text-center">{{ row.executor }}</td>
+                                <td class="txt-oflo text-center">{{ row.phase }}</td>
+                                <td class="txt-oflo text-center">{{ row.status }}</td>
+                                <td class="txt-oflo text-center">{{ row.action }}</td>
+                                <td class="txt-oflo" style="text-align:left; padding-left: 10px;">{{ row.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <!-- Footable -->
+    <script src="{% static 'plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <!-- <script src="{% static 'plugins/bower_components/footable/src/js/FooTable.js' %}"></script> -->
+    <!--FooTable init-->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.amd.min.js"></script> -->
+    <script src="{% static 'js/remove_acl_hitcount/generate_components.js' %}"></script>
+    <script src="{% static 'js/remove_acl_hitcount/filtering.js' %}"></script>
+
+    <!-- Sweet Alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+    var stdRuleTables;
+    $(document).ready(function(){
+    // init FooTable
+    $('#table_ticket_list').footable({
+        pageSize: 20
+    });
+    
+    //init History table 
+    $('#table_request_history').DataTable({
+                "order": [[ 0, "asc" ]], // Sort by column REQUEST_ID
+                "lengthMenu": [[15, 50, 100, -1], [15, 50, 100, "All"]]
+            });
+    
+    $('#show_entries').change(function (e) {
+		e.preventDefault();
+		var pageSize = $(this).val();
+		$('#table_ticket_list').data('page-size', pageSize);
+        $('#table_ticket_list').trigger('footable_initialized');
+    });
+    
+    // select all checkbox
+    $('#table_ticket_list').on('change','#check-all', function(){
+        $('#table_ticket_list tbody tr.ticket-row .check-one').prop('checked',this.checked);
+        showButtonOnCheck();
+    });
+
+    //select all option
+    $('#table_ticket_list').on('click','#select-all',function(event){
+        event.preventDefault();
+        $('#table_ticket_list tbody tr.ticket-row').each(function(){
+            $(this).find('.check-one').prop('checked',true);
+        });
+        showButtonOnCheck();
+    });
+
+    //selct all failed rules
+    $('#table_ticket_list').on('click','#select-failed',function(event){
+        event.preventDefault();
+        $('#table_ticket_list tbody tr.ticket-row').each(function(){
+            var phase = $(this).find('.cell-phase span').text();
+            var status = $(this).find('.cell-status span').text();
+            if (phase.includes('SESSION') && status == 'FAILED'){
+                $(this).find('.check-one').prop('checked',true);                
+            }
+        });
+        showButtonOnCheck();        
+    });
+
+    //select all waiting rules
+    $('#table_ticket_list').on('click','#select-waiting',function(event){
+        event.preventDefault();
+        $('#table_ticket_list tbody tr.ticket-row').each(function(){
+            var phase = $(this).find('.cell-phase span').text();
+            var status = $(this).find('.cell-status span').text();
+            if (phase == 'WAITING NOC' && status == 'WAITING'){
+                $(this).find('.check-one').prop('checked',true);                
+            }
+        });
+        showButtonOnCheck();        
+    });
+    
+    //select all accepted rules
+    $('#table_ticket_list').on('click','#select-accepted',function(event){
+        event.preventDefault();
+        $('#table_ticket_list tbody tr.ticket-row').each(function(){
+            var phase = $(this).find('.cell-phase span').text();
+            var status = $(this).find('.cell-status span').text();
+            if (phase == 'WAITING NOC' && status == 'ACCEPTED'){
+                $(this).find('.check-one').prop('checked',true);                
+            }
+        });
+        showButtonOnCheck();        
+    });
+    
+    //compare 2 object
+    function isEquivalent(a, b) {
+
+        var aProps = Object.getOwnPropertyNames(a);
+        var bProps = Object.getOwnPropertyNames(b);
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+            if (a[propName] !== b[propName]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //3 types appropriate to 3 button types 0: retry, 1: accept / discard, 2: stop check session
+    let ticketTypes = [
+    {
+        status: 'FAILED',
+        phase: 'SESSION CHECK'
+    },
+    {
+        status: 'WAITING',
+        phase: 'WAITING NOC'
+    },
+    {
+        status: 'WAITING',
+        phase: 'SESSION CHECK'
+    }
+    ];
+    
+    //check selected row type
+    {% if 'NOC' in request.user.domain|get_group %}
+    function showButtonOnCheck(){
+            var checkedRows = $('#table_ticket_list tbody tr.ticket-row').filter(function(){
+                return $(this).find('.check-one:checked').length > 0;
+            });
+            if (checkedRows.length == 0){
+                $('.button-container').find('button').remove();
+                checkShowStopBtn();
+                return;
+            }
+            var generalType = new Object();
+            generalType.status = checkedRows.first().find('.cell-status span').text();
+            generalType.phase = checkedRows.first().find('.cell-phase span').text();
+            
+            //find the type of current Ticket in ticketTypes
+            var ticketTypeIndex = -1;
+            ticketTypes.forEach((ticketType, idx)=>{
+                if (isEquivalent(generalType, ticketType))
+                {
+                    ticketTypeIndex = idx;
+                    return;
+                }
+            });
+            if (ticketTypeIndex == -1){
+                $('.button-container').find('button').remove()
+                return;
+            }
+            
+            //check whether all selections are the same type
+            for (var i=1; i<checkedRows.length; i++){
+                var status = $(checkedRows[i]).find('.cell-status span').text();
+                var phase = $(checkedRows[i]).find('.cell-phase span').text();
+                if (status != generalType.status || phase != generalType.phase)
+                break;
+            }
+
+            //if selected row are the same type, show the appropriate button
+            if (i == checkedRows.length){
+                $('.button-container').find('button').remove();
+                //Failed ticket
+                if (ticketTypeIndex == 0)
+                    $('.button-container>div').append(btnRetry);
+                //Waiting ticket
+                else if (ticketTypeIndex == 1){
+                    $('.button-container>div').append(btnAccept);
+                    $('.button-container>div').append(btnDiscard);
+                }
+                // Checking session ticket
+                else if (ticketTypeIndex == 2)
+                    // if (canStopCheck)
+                        checkShowStopBtn();
+            }
+            else
+            $('.button-container').find('button').remove();
+        }
+    {% else %}
+        function showButtonOnCheck(){}
+    {% endif %}
+
+    //handle check one checkbox event
+    $('#table_ticket_list tbody tr.ticket-row').on('change','.check-one',showButtonOnCheck);
+
+    //prevent row onclick event effect to modal
+    $('.modal-content').on('click',function(event){
+        event.stopPropagation();
+    });
+});
+
+    $('#ticket-progress').children().on('mouseover mouseout', function(event){
+        event.stopPropagation();
+        //hide multiple tooltip at once
+        $('.tooltip').not(this).hide();
+    });
+    </script>
+    <script>
+    //whether NOC can stop check session or not
+    var canStopCheck;
+    var readyStop;
+
+    //get standard rule datatable
+    function getStdRuleDataTable(tableSelector){
+        // check if this table is Initialized datatable or not
+        if ($.fn.dataTable.isDataTable(tableSelector))
+            //return dataTable instance of this table
+            return tableSelector.DataTable();
+        //create new instance 
+        return tableSelector.DataTable({
+            "ordering": false,
+            "info": false,
+            language: {
+                emptyTable: "No rules available in this table"
+            },
+            deferRender: true,
+        });
+    }
+    
+    //initialize column searching select
+    function initSelectFilter(filterable, statusIdx){
+        //reset previous filter
+        this.columns('').search('').draw();
+
+        //filtable column
+        // var filterable = [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        this.columns(filterable).every(function(){
+            var column = this;
+            // console.log('Footer');
+            // console.log(column.footer());
+            var select = $('<select><option value=""></option></select>')
+            .appendTo($(column.header()).empty())
+            .on('change', function(e){
+                e.stopImmediatePropagation();
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+                // console.log('Searching with value: ', val);
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+            // console.log('column data');
+            // console.log(column.data().unique());
+            column.data().unique().sort().each(function(d, j){
+                //check index of status cell
+                if (column.index() == statusIdx)
+                    d = $(d).text();
+                select.append('<option value="' + d + '">' + d+ '</option>');
+            });
+        });
+    }
+
+    function getHistoryDataTable(tableSelector){
+        // check if this table is Initialized datatable or not
+        if ($.fn.dataTable.isDataTable(tableSelector))
+            //return dataTable instance of this table
+            return tableSelector.DataTable();
+        else{
+
+            //create new instance 
+            var t = tableSelector.DataTable({
+                columnDefs: [{
+                    type: 'datetime', 
+                    'targets': [1]
+                    },
+                    {
+                        searchable: false,
+                        orderable: false,
+                        targets: 0
+                    }
+                ],
+                "order": [[ 1, "desc" ]], // Sort by column DATE_CREATED
+                "info": false,
+                language: {
+                    emptyTable: "No Ticket History!"
+                },
+                deferRender: true,
+            });
+            //first index column
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                });
+            }).draw();
+        }
+        return t;
+    }
+    
+    // get no format rule datatable
+    function getNFRuleDataTable(tableSelector){
+         // check if this table is Initialized datatable or not
+         if ($.fn.dataTable.isDataTable(tableSelector))
+            //return dataTable instance of this table
+            return tableSelector.DataTable();
+
+        //create new instance 
+        return tableSelector.DataTable({
+            "ordering": false,
+            "info": false,
+            // "searching":false,
+            "processing": true,
+            language: {
+                emptyTable: "No rules available in this table",
+                processing: "Loading ..."
+            },
+            deferRender: true,
+        });
+    }
+    
+    //get data from backend server and render data
+    $(document).ready(function(){
+        
+        //get workflow data
+        function getWorkflow(){
+            var workflowBtn = $(this);
+            var ticket_id = workflowBtn.closest('tr').find('.cell-ticketid').text();
+            var request_id = $('#request-id').text();
+            $.ajax({
+            type: 'GET',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act':'get_ticket_workflow',
+                'ticket_id': ticket_id,
+                'request_id': request_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // console.log(data);
+                if (data.status_code == '200'){
+                    var args = data.result_data;
+                    if (args!='')
+                    {
+                        // console.log('rendering workflow data');
+                        let workflowData = data.result_data;
+                        // console.log(workflowData)
+                        let workflowModal = workflowBtn.closest('.workflow-wrapper')
+                        .find('.workflow-modal .modal-body');
+                        workflowModal.empty();
+                        let htmlWorkflow = renderWorkflow(workflowData);
+                        workflowModal.append(htmlWorkflow);
+                    }
+                }
+                else {
+                    swal("Error","Cannot get data from server. Please contact DC System Team.","warning");
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please contact DC System Team.", "error");
+            }
+        });
+        }
+
+        $('#table_ticket_list tbody tr.ticket-row').on('click','.cell-action .workflow-wrapper>button', function(event){
+            event.preventDefault();
+            getWorkflow.call(this);
+            var modalId = $(this).data('target');
+            var historyModal = $(this).closest('.workflow-wrapper').find(modalId);
+            // historyModal.modal('show');
+            historyModal.find('[data-dismiss="modal"]').on('click', function(){
+                historyModal.modal('hide');
+            });
+        });
+        
+        //render ticket status and phase
+        function renderTicket(ticketSelector, ticketData){
+            //render status
+            var statusNode = renderTicketStatus(ticketData.status); 
+            if (statusNode != ''){
+                let statusCell = ticketSelector.find('.cell-status');
+                statusCell.empty();
+                statusCell.append(statusNode);
+            }
+            //render phase
+            var phaseNode = renderTicketPhase(ticketData.phase);
+            if (phaseNode != ''){
+                let phaseCell = ticketSelector.find('.cell-phase');
+                phaseCell.empty();
+                phaseCell.append(phaseNode);
+            }
+            {% if 'NOC' in request.user.domain|get_group %}
+            if (ticketData.status == 'FAILED' && ticketData.phase == 'SESSION CHECK'){
+                var retryNode = renderRetryAction();
+                let retryWrapper = ticketSelector.find('.cell-action .retry-wrapper');
+                if (retryWrapper.children().length == 0){
+                    retryWrapper.append(retryNode);
+                    //update retry tooltip
+                    retryWrapper.children().first().tooltip();
+                }
+            }
+            else{
+                let retryWrapper = ticketSelector.find('.cell-action .retry-wrapper');
+                if (retryWrapper.children().length != 0){
+                    retryWrapper.empty();
+                }
+            }
+            {% endif %}
+        }
+        
+        //render executor and tracking id
+        function renderTrackIdExecutor(ticketSelector, trackExec){
+            var executor = trackExec.executor;
+            var tracking_id = trackExec.tracking_id;
+            if (executor)
+            {
+                ticketSelector.find('.cell-executor').text(trackExec.executor);
+            }
+            if (tracking_id)
+            {
+                let trackingNode = renderTrackingId(tracking_id);
+                ticketSelector.find('.cell-trackingid').empty().append(trackingNode);
+            }
+
+        }
+
+        //get rule from server
+        function getRules(ticketSelector){
+            // var ticketSelector = $(this).closest('tr');
+            var request_id = $('#request-id').text();
+            var ticket_id = ticketSelector.find('.cell-ticketid').text();
+            
+            //get Jquery rule table
+            var stdRuleTableSelector = ticketSelector.next().find('table.std-rule-table');
+            var nfRuleTableSelector = ticketSelector.next().find('table.nf-rule-table');
+            var $ruleTableRows;
+            var hasLoader = false;
+            // console.log('getting rules .....');
+            $.ajax({
+            type: 'GET',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act':'get_rules',
+                'ticket_id': ticket_id,
+                'request_id': request_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            beforeSend: function(){
+                // return;
+                // console.log('rendering loader...');
+                //get the current type of table selector
+                if (stdRuleTableSelector.length > 0 )
+                {
+                    $ruleTableRows = stdRuleTableSelector.find('tbody');
+                }
+                else
+                {
+                    $ruleTableRows = nfRuleTableSelector.find('tbody');
+                }
+                //If this table is absolutely empty, render loader, otherwise use cache
+                if ($ruleTableRows.children().length == 0)
+                {
+                    var loadRow = renderLoader();
+                    $ruleTableRows.empty().append(loadRow);
+                    hasLoader = true;
+                }
+            },
+            success: function(data){
+                // console.log(data);
+                //remove the loader before render table
+                if (hasLoader)
+                $ruleTableRows.empty();
+                // return;
+                if (data.status_code == '200'){
+                    var args = data.result_data;
+                    if (args!='')
+                    {
+                        let stdRuleList = args.std_rule;
+                        let nfRuleList = args.nf_rule;
+                        // get datatables for current StdRuleTable
+                        if (stdRuleList.length > 0)
+                        {
+                            //change name of the table
+                            ticketSelector.next().find('div.footable-row-detail-name').text('STANDARD RULES');
+
+                            var crStdRuleTable = getStdRuleDataTable(stdRuleTableSelector);
+                            
+                            // clear all previous row
+                            crStdRuleTable.rows().remove().draw();
+                            //render new Std rule table
+                            stdRuleList.forEach(entry => {
+                                let ruleHtml = renderStdRuleTable(entry);
+                                crStdRuleTable.row.add($(ruleHtml)).draw();
+                        });
+                            var filterable = [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+                            initSelectFilter.call(crStdRuleTable, filterable, 3);
+                        }
+                        if (nfRuleList.length > 0)
+                        {
+                            //change name of the table
+                            ticketSelector.next().find('div.footable-row-detail-name').text('NO FORMAT RULES');
+                            
+                            var crNFRuleTable = getNFRuleDataTable(nfRuleTableSelector);
+
+                            //clear all previous row
+                            crNFRuleTable.rows().remove().draw();
+                            //render new nf rule table
+                            nfRuleList.forEach(entry =>{
+                                let ruleHtml = renderNFRuleTable(entry);
+                                crNFRuleTable.row.add($(ruleHtml)).draw();
+                            });
+                            var filterable = [1, 2, 3, 4, 5];
+                            initSelectFilter.call(crNFRuleTable, filterable, 5);
+                        }
+                    }
+                }
+                else {
+                    swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+            }
+        });
+        }
+        
+        //render std rule table when clicking the row
+        $('#table_ticket_list tbody').on('click','tr.ticket-row', function(){
+            if ($(this).hasClass('footable-detail-show')){
+                getRules($(this));
+            }
+        });
+        
+        //get status data from server
+        function getStatus(){
+            // console.log('updating status ...');
+            var request_id = $('#request-id').text();
+            $.ajax({
+            type: 'GET',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act':'get_all_ticket_status',
+                'request_id': request_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // console.log(data);
+                if (data.status_code == '200'){
+                    var args = data.result_data;
+                    if (args!='')
+                    {
+                        let ticketStatusList = args.tickets;
+                        let requestStatus = args.status;
+                        let requestEnd = args.end_time;
+                        //update request status
+                        if (requestStatus){
+                            let ReqStatusHtml = renderRequestStatus(requestStatus);
+                            $('#request-status').empty().append(ReqStatusHtml);
+                        }
+                        if (requestEnd)
+                        {
+                            $('#end-date').text(requestEnd);
+                        }
+
+                        //cause rows are not fixed, so we have to map between ticketId of rows
+                        //and result data
+                        $('#table_ticket_list tbody tr.ticket-row').each(function(){
+                            //get ticketID of this row
+                            let ticketId = $(this).find('.cell-ticketid').children().last().text();
+                            let ticketStatus = ticketStatusList.find((element)=>{
+                                return element.ticket_id == ticketId;
+                            });
+                            if (ticketStatus){
+                                renderTicket($(this), ticketStatus);
+                            }
+                        });
+                        
+                        // find PROCESSING ticket and update executor and tracking id
+                        var processingTicketIdList = [];
+                        ticketStatusList.forEach(ticketStatus => {
+                            if (ticketStatus.status == 'WAITING' && ticketStatus.phase == 'PROCESSING')
+                            {
+                                    processingTicketIdList.push(ticketStatus.ticket_id);
+                            }
+                        });
+
+                        // console.log('processing ticket list');
+                        // console.log(processingTicketIdList);
+                        //update executor and tracking id
+                        if (processingTicketIdList.length > 0)
+                            getTrackExec(processingTicketIdList)
+                    }
+                }
+                else {
+                    swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+            }
+        });
+        }
+        
+        function getTrackExec(ticket_id_list){
+            // console.log('updating traking id & executor');
+            var request_id = $('#request-id').text();
+                $.ajax({
+                type: 'GET',
+                url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+                data: {
+                    'act':'get_ticket_track_exec',
+                    'request_id': request_id,
+                    'ticket_id_list': JSON.stringify(ticket_id_list),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data){
+                    // console.log(data);
+                    if (data.status_code == '200'){
+                        var args = data.result_data;
+                        if (args!='')
+                        {
+                            let trackExecList = data.result_data.tickets;
+                            // console.log(trackExecList);
+                            trackExecList.forEach(ticket => {
+                                var updateTicket = $('#table_ticket_list tbody tr.ticket-row').filter(function(){
+                                    var ticketIdText = $(this).find('.cell-ticketid').children().last().text();
+                                    return ticketIdText == ticket.ticket_id;
+                                });
+                                if (updateTicket)
+                                    renderTrackIdExecutor(updateTicket, ticket);
+                        });
+                        }
+                    }
+                    else {
+                        swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+                }
+            });
+        }
+        
+        //get multiple tickets status
+        function getStatusMul(ticket_id_list){
+                // console.log('updating status one ...');
+                var request_id = $('#request-id').text();
+                $.ajax({
+                type: 'GET',
+                url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+                data: {
+                    'act':'get_multiple_ticket_status',
+                    'request_id': request_id,
+                    'ticket_id_list': JSON.stringify(ticket_id_list),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data){
+                    // console.log(data);
+                    if (data.status_code == '200'){
+                        var args = data.result_data;
+                        if (args!='')
+                        {
+                            let ticketStatusList = data.result_data.tickets;
+                            // console.log(ticketStatusList);
+                            ticketStatusList.forEach(ticket => {
+                                var updateTicket = $('#table_ticket_list tbody tr.ticket-row').filter(function(){
+                                    var statusText = $(this).find('.cell-ticketid').children().last().text();
+                                    return statusText == ticket.ticket_id;
+                                });
+                                if (updateTicket)
+                                    renderTicket(updateTicket, ticket);
+                        });
+                        }
+                    }
+                    else {
+                        swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+                }
+            });
+        }
+        
+        function calPercentage(statData, ticketCount){
+            //calculate percentage
+            var tickPercent = new Object();
+            if (!Number.isNaN(ticketCount))
+            {
+                let percentValue = statData.finished_tickets / ticketCount * 100;
+                tickPercent.finished = Number(percentValue.toFixed(1));
+                
+                percentValue = statData.processing_tickets / ticketCount * 100;
+                tickPercent.processing = Number(percentValue.toFixed(1));
+
+                percentValue = statData.waiting_noc_tickets / ticketCount * 100;
+                tickPercent.waiting = Number(percentValue.toFixed(1));
+
+                percentValue = statData.failed_tickets / ticketCount * 100;
+                tickPercent.failed = Number(percentValue.toFixed(1));
+
+                percentValue = statData.rejected_tickets / ticketCount * 100;
+                tickPercent.rejected = Number(percentValue.toFixed(1));
+            }
+            return tickPercent;    
+        }
+        
+        function renderProgress(progressSelector, value, percent)
+        {
+            // render number of ticket
+            if (Number.isNaN(value) || Number.isNaN(percent))
+                return;
+            var title = progressSelector.data('original-title');
+            var newTitle = title.replace(/\b\d+\//g, value.toString() + '/');
+            //replace new title
+            progressSelector.attr('data-original-title', newTitle);
+            var percentStr = percent.toString() + '%';
+            progressSelector.width(percentStr);
+            if (percent != 0)
+            {
+                var percentHtml = `<span class="align-middle">`+ percentStr +`</span>`;
+                progressSelector.empty().append(percentHtml);
+            }
+            else
+                progressSelector.empty();
+        }
+
+        function renderStatistics(statData){
+            $('#total-failed-rule').text(statData.failed_rules);
+            $('#total-remove-rule').text(statData.remove_rules);
+            $('#total-keep-rule').text(statData.keep_rules);
+            $('#total-disabled-rule').text(statData.disabled_rules);
+
+            var progress = $('#ticket-progress');
+            var ticketCount = Number(progress.find('#total_ticket').text());
+            var tickPercent = calPercentage(statData, ticketCount);
+            if (jQuery.isEmptyObject(tickPercent))
+                return;
+            //update finished tickets
+            renderProgress(progress.find('#finished-progress'), statData.finished_tickets, tickPercent.finished);
+            //update processing tickets
+            renderProgress(progress.find('#processing-progress'), statData.processing_tickets, tickPercent.processing);
+            //update processing tickets
+            renderProgress(progress.find('#waiting-noc-progress'), statData.waiting_noc_tickets, tickPercent.waiting);
+            //update processing tickets
+            renderProgress(progress.find('#failed-progress'), statData.failed_tickets, tickPercent.failed);
+            //update processing tickets
+            renderProgress(progress.find('#rejected-progress'), statData.rejected_tickets, tickPercent.rejected);
+        }
+
+        function getStatistic(){
+            // console.log('getting statistic...');
+            var request_id = $('#request-id').text();
+                $.ajax({
+                type: 'GET',
+                url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+                data: {
+                    'act':'get_statistics',
+                    'request_id': request_id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data){
+                    // console.log(data);
+                    if (data.status_code == '200'){
+                        var args = data.result_data;
+                        if (args!='')
+                        {
+                            //calculate percentage
+                            renderStatistics(args);
+                        }
+                    }
+                    else {
+                        swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+                }
+            });
+        }
+
+        // polling status handler
+        var pollingTimer = setInterval(async function(){
+            var reqStatus = $('#request-status').text();
+            if (reqStatus.includes('FINISHED'))
+                clearInterval(pollingTimer);
+            else{
+                getStatus();
+                getStatistic();
+
+                {% if request.user.domain|get_group == 'NOC_LV2' %}
+                await getStopCheckStatus();
+                // console.log('Can stop check: ', canStopCheck);
+
+                //render stop check session button if there's no checked tickets
+                if (canStopCheck){
+                    var $checkedButton = $('.button-container>div');
+                    if ($checkedButton.find('button').length == 0){
+                        $checkedButton.append(btnStop);
+                        // console.log('Rendering stop button on getStatus()');
+                    }
+                }
+                else{
+                    var $checkedButton = $('.button-container>div');
+                    if ($checkedButton.find('#btn_stop').length != 0){
+                        $checkedButton.empty();
+                    }
+                }
+                {% endif %}
+            }
+        }, 10000);
+
+        function renderHistory(historyTableSelector, historyData){
+            //get ticket history datatable
+            var currentHistoryTable = getHistoryDataTable(historyTableSelector);
+
+            // var currentHistoryTable = ticketHistoryTables.table(historyTableSelector);
+            
+            //delete all rows from the history table
+            currentHistoryTable.rows().remove().draw();
+            
+            // console.log('history data');
+            // console.log(historyData);
+            historyData.forEach((entry, index) => {
+                //render HTML code 
+                var historyRow = renderHistoryTable(entry,++index);
+                //append to current History table
+                currentHistoryTable.row.add($(historyRow)).draw();
+            });
+            currentHistoryTable.draw();
+        }
+
+        //get history info from backend
+        function getHistory(){
+            var historyBtn = $(this);
+            //get ticket_id and request_id
+            var request_id = $('#request-id').text()
+            var ticket_id = $(this).closest('tr.ticket-row').find('.cell-ticketid span').last().text();
+            $.ajax({
+            type: 'GET',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act':'get_ticket_history',
+                'request_id': request_id,
+                'ticket_id': ticket_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // console.log(data);
+                if (data.status_code == '200'){
+                    var args = data.result_data;
+                    if (args!='')
+                    {
+                        let ticketHistoryList = data.result_data.history_info;
+                        let historyTableSelector = historyBtn.closest('.history-wrapper')
+                        .find('.history-modal .table-ticket-history');
+                        // console.log('rendering history table');
+                        renderHistory(historyTableSelector, ticketHistoryList);
+                    }
+                }
+                else {
+                    swal("Error","Cannot get data from server. Please check your internet connection or contact DC System Team.","warning");
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+            }
+        });
+        }
+        
+        //handle history button
+        $('#table_ticket_list tbody tr.ticket-row').on('click','.cell-action .history-wrapper>button', function(event){
+            event.preventDefault();
+            getHistory.call(this);
+            var modalId = $(this).data('target');
+            var historyModal = $(this).closest('.history-wrapper').find(modalId);
+            // historyModal.modal('show');
+            var closeBtns = historyModal.find('[data-dismiss="modal"]').on('click', function(){
+                historyModal.modal('hide');
+            });
+        });
+        
+        // retry function
+        async function retry(ticketIdList){
+            var request_id = $('#request-id').text();
+            var retryStatus = 0;
+            await $.ajax({
+            type: 'POST',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act':'retry',
+                'ticket_id_list': JSON.stringify(ticketIdList),
+                'request_id': request_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // console.log(data);
+                if (data.status_code == '200'){
+                    var args = data.result_data;
+                    if (args)
+                    {
+                        // define success handler here
+                        
+                        retryStatus = args;
+                    }
+                    else{
+                        swal("Error","Failed! There was an error has occurred. Please check your internet connection or contact DC System Team.","warning");
+                    }
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+            }
+        });
+        return retryStatus;
+        }
+
+        //retry button handler
+        $('#table_ticket_list tbody tr.ticket-row').on('click','.cell-action .retry-wrapper>button',async function(){
+            var ticket_id = $(this).closest('tr.ticket-row').find('.cell-ticketid span').last().text();
+            let result = await retry([ticket_id])
+            
+            //retry successful
+            if (result == 1){
+                $(this).tooltip('hide');
+                $(this).remove();
+                getStatusMul([ticket_id]);
+                getStatistic();
+                initStop();
+            }
+            
+            //can not retry cause stopping check session
+            else if (result == 2){
+                $(this).tooltip('hide');
+                swal("Error", "Stop request is being processed. Please retry later!", "error");
+            }
+        });
+
+        //function get selected ticket_id and uncheck all selected row
+        function getSelectedTicketId(){
+            var ticketIdList = [];
+            $('#table_ticket_list tbody tr.ticket-row').find('.check-one:checked').each(function(){
+                let ticket_id = $(this).closest('tr').find('.cell-ticketid span').last().text();
+                if (ticket_id != '')
+                    ticketIdList.push(ticket_id);
+                // uncheck this row
+                $(this).prop('checked', false).change();
+            });
+            return ticketIdList;
+        }
+
+        //handle multiple retry button
+        $('.button-container').on('click','#btn_retry',async function(){
+            var ticketIdList = getSelectedTicketId();
+            let result = await retry(ticketIdList);
+            if (result == 1){
+                //remove this button
+                $(this).remove();
+                // remove all retry button on each tickets
+                $('tr.ticket-row .cell-action .retry-wrapper>button').remove();
+                //reload status
+                // getStatus();
+                getStatusMul(ticketIdList);
+                getStatistic();
+                initStop();
+            }
+            else if (result == 2){
+                //remove this button
+                $(this).remove();
+                swal("Error", "Stop request is being processed. Please retry later!", "error");
+
+            }
+        });
+
+        //send accept or discard request to server
+        async function sendWaitingAction(ticketIdList, action){
+            var request_id = $('#request-id').text();
+            var sendStatus = false;
+            await $.ajax({
+            type: 'POST',
+            url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+            data: {
+                'act': action,
+                'ticket_id_list': JSON.stringify(ticketIdList),
+                'request_id': request_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // console.log(data);
+                if (data.status_code == '200'){
+                    var args = data.result_data.status;
+                    if (args == 1)
+                    {
+                        // define success handler here
+                        sendStatus = true;
+                    }
+                    else{
+                        swal("Error","Failed! There was an error has occurred. Please check your internet connection or contact DC System Team.","warning");
+                    }
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+            }
+        });
+            return sendStatus;
+        }
+
+        //handle accept button
+        $('.button-container').on('click','#btn_accept',function(){
+            swal({
+            title: "Warning",
+            text: "Are you sure to accept this ticket ?",
+            icon: "warning",
+            closeModal: true,
+            buttons: ['No', 'Yes'],
+            dangerMode:true
+        }).then(
+            async function (isConfirm){
+                var ticketIdList = getSelectedTicketId();
+                let result;
+                try {
+                    result = await sendWaitingAction(ticketIdList,'accept');                
+                } catch (error) {
+                    result = false;
+                }
+                if (result){
+                    //remove this button
+                    $(this).closest('.button-container').empty();
+                    //reload status
+                    // console.log('prepare to get status');
+                    // getStatus();
+                    getStatusMul(ticketIdList);
+                    swal("Success!", "Your ticket has been accepted!", "success");
+                    getStatistic();
+            }
+            }
+        );
+        });
+
+        // handle discard button
+        $('.button-container').on('click', '#btn_discard',function(){
+        swal({
+            title: "Warning",
+            text: "Are you sure to discard this ticket ?",
+            icon: "warning",
+            closeModal: true,
+            buttons: ['No', 'Yes'],
+            dangerMode:true
+        }).then(
+            async function(isConfirm){
+            if (isConfirm){
+                var ticketIdList = getSelectedTicketId();
+                let result;
+                try {
+                    result = await sendWaitingAction(ticketIdList,'discard');                
+                } catch (error) {
+                    result = false;
+                }
+                if (result){
+                //remove this button
+                    $(this).closest('.button-container').empty();
+                //reload status
+                    // getStatus();
+                    getStatusMul(ticketIdList);
+                    swal("Success!", "Your ticket has been discarded!", "success");
+                    getStatistic();
+                }
+            }
+        }
+        );
+    });
+
+    //send stop action
+    async function sendStopCheck(){
+        var request_id = $('#request-id').text();
+        var sendStatus = 0;
+        await $.ajax({
+        type: 'GET',
+        url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+        data: {
+            'act': 'stop_check_session',
+            'request_id': request_id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data){
+            // console.log(data);
+            if (data.status_code == '200'){
+                var args = data.result_data.status;
+                if (args)
+                {
+                    // define success handler here
+                    sendStatus = args;
+                }
+                else{
+                    swal("Error","Failed! There was an error has occurred. Please check your internet connection or contact DC System Team.","warning");
+                }
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+        }
+    });
+        return sendStatus;
+    }
+
+    async function getStopCheckStatus(){
+        var request_id = $('#request-id').text();
+        var stopDone = false;
+        await $.ajax({
+        type: 'GET',
+        url: '/noc_utilities/remove_acl_hitcount/request_handler/',
+        data: {
+            'act': 'check_stop_session_status',
+            'request_id': request_id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data){
+            // console.log(data);
+            if (data.status_code == '200'){
+                var args = data.result_data;
+                if (args != null)
+                {
+                    readyStop = args.is_ready_to_stop;
+                    if (readyStop && args.is_waiting_ticket)
+                        canStopCheck = true;
+                    else 
+                        canStopCheck = false;
+                    // define success handler here
+                    stopDone = readyStop;
+                }
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            swal("Error", "Status: " + textStatus + ". Error: " + errorThrown + ". Please check your internet connection or contact DC System Team.", "error");
+        }
+    });
+        return stopDone;
+    }
+
+    //handle stop button
+    $('.button-container').on('click','#btn_stop',function(){
+        var $stopBtn = $(this);
+        swal({
+            title: "Warning",
+            text: "Are you sure to stop checking session for all tickets?",
+            icon: "warning",
+            closeModal: true,
+            buttons: ['No', 'Yes'],
+            dangerMode:true
+        }).then(
+            async function(isConfirm){
+                if(isConfirm){
+                    let result;
+                    try {
+                        result = await sendStopCheck();  
+                    } catch (error) {
+                        result = 0;
+                    }
+                    if (result == 1){
+                        //remove this button
+                        $stopBtn.remove();
+                        // $(this).closest('.button-container>div').empty();
+                        //reload status
+                        getStatistic();
+                        var pollingStop = setInterval(async function(){
+                            let stopStatus = await getStopCheckStatus();
+                            if (stopStatus)
+                            {
+                                clearInterval(pollingStop);
+                                swal("Completed!","Stop checking session done!", "success");
+                                checkShowStopBtn();
+                            }
+                        },5000);
+                    }
+                    else if (result == 2){
+                        //remove this button
+                        $stopBtn.remove();
+                        //reload status
+                        getStatistic();
+
+                        swal("Error", "Stop request is being processed. Please retry later!", "error");
+                    }
+                }
+            }
+        );
+            
+        });
+    
+    {% if request.user.domain|get_group == 'NOC_LV2' %}
+        async function initStop(){
+            let result;
+            result = await getStopCheckStatus();
+            if (result){
+                // if (canStopCheck)
+                    checkShowStopBtn();
+            }
+        }
+    {% else %}
+        async function initStop(){
+            canStopCheck = false;
+            readyStop = false;
+        }
+    {% endif %}
+
+
+    //fetch stop status when starting up
+    initStop();
+
+    }); // document
+    </script>
+    <script>
+        /*calculate render time*/
+        // var renderStart = new Date().getTime();
+        // window.onload = function(){
+        //     var elasped = new Date().getTime() - renderStart;
+        //     // console.log('Rendered in '+ elasped/1000 + 's');
+        // }
+            //Show stop button
+    function showStopBtn(){
+        console.log('Show stop button in showStopBtn()');
+        $('.button-container>div').append(btnStop);
+    }
+    
+    //check can show Stop Button or not 
+    function checkShowStopBtn(){
+        if (canStopCheck){
+        var $checkedButton = $('.button-container>div');
+        if ($checkedButton.find('button').length == 0)
+            $checkedButton.append(btnStop);
+        }
+    }
+    </script>
+{% endblock script %}

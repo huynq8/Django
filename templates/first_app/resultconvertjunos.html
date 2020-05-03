@@ -1,0 +1,132 @@
+
+{% extends "first_app/base.html" %}
+{% block block_body %}
+{% load staticfiles %}
+<div style="margin: 2%">
+	<h3>CONVERT JUNOS</h3>
+	<div class="row padd-row"></div>
+    <!--input type="text" id="test"></input>
+    <button id="susu">Check</button-->
+	<form method="POST" id="myForm">
+	{% csrf_token %}
+	<form enctype = "multipart/form-data" method = "POST" action="" id="form">
+		{% csrf_token %}
+		
+    		<div class="row padd-row">
+    			<div class="col-sm-12">
+    				<div class="input-group">
+    					<label class="input-group-btn">
+    						<span class="btn btn-primary">
+    							Load File&hellip; <input type="file" class="form-control-file" name="LoadFile" id="file-csv" style="display: none;">
+    						</span>
+    					</label>
+						<table>
+							<tr>
+								<th style="width:1000px; padding:5px">
+									<input type="text" class="form-control" readonly>
+								</th>
+							</tr>
+						</table> 	
+    				</div>
+    			</div>
+    		</div>
+    	</form>
+    	<table style="width:100%">
+    		<tr>
+				<th>NHẬP ĐOẠN CODE CẦN CONVERT</th>
+				<th>KẾT QUẢ CONVERT</th>
+			</tr>
+			<tr>
+				<td>
+					<form action="/resultconvertjunos" id = "input">
+						{% csrf_token %}
+						<textarea name="message" style="width:500px; height:600px;">{{input}}</textarea>
+						<br>
+					</form>
+				</td>
+				<td>
+					<textarea name="message" style="width:500px; height:600px;" >{{result}}</textarea>
+					<br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="row">
+						<div class="col-sm-12">
+							<button  name="generate-command" type="submit" class="btn btn-success" id="generate">CONVERT</button>
+							<button type="reset" class="btn btn-danger" value="Reset">Clear all</button>
+						</div>
+					</div>
+				</td>
+			</tr>
+    	</table>
+		<!--{% if result %}
+		<table style="width:100%">
+			<tr>
+				<th style="padding:5px">RULE ON SRX123Pay</th>
+				<th>RULE ON OTHER SRX</th>
+			</tr>
+			<tr>
+				<td style="padding:5px"><pre>{{result.cmd1}}</pre></td>
+				<td style="padding:5px"><pre>{{result.cmd2}}</pre></td>
+			</tr>
+		</table>-->
+		<!--{% endif %}-->
+    	
+    	<div id="manual-result" class="padd-row"></div>
+    	<hr />
+		</form>
+
+    	
+    	<div id="result" class="padd-row"></div>
+			<!--{% if result_lst %}-->
+			<!--{% for item in result_lst %}-->
+			<table class="table table-condensed table-bordered" id="table">
+				<thead style="background-color: #e6e6e6; font-size: 0.9em">
+					<tr>
+						<th>No.</th><th>Protocol</th>
+						<th>Source VLAN</th><th>Source IP</th>
+						<th>Source Port</th><th>Dest VLAN</th>
+						<th>Dest IP</th><th>Dest Port</th></tr>
+				</thead>
+				<tbody id="tbody">
+				</tbody>
+				<!--<tr class="active" style="font-size: 0.8em;" id="row_info_0">
+					<th scope="row" style="text-align: center; color:black">{{item.No}}</th>
+					<th scope="row"style="text-align: center; color:black">{{item.protocol}}</th>
+					<th scope="row" style="text-align: center; color:black">{{item.srcvlan}}</th>
+					<th scope="row" style="text-align: center; color:black">{{item.srcip}}</th>
+					<th scope="row" style="text-align: center; color:black" id="row_info_source_port_0">{{item.srcport}}</th>
+					<th scope="row" style="text-align: center; color:black">{{item.dstvlan}}</th>
+					<th scope="row" style="text-align: center; color:black">{{item.dstip}}</th>
+					<th scope="row" style="text-align: center; color:black" id="row_info_dest_port_0">{{item.dstport}}</th>
+				</tr>-->
+				<tr style="height: 10%; font-size: 0.9em;">
+					<td colspan="2" id="command_row_device_list_0" style="font-size: 0.8em; font-weight: bold; color: #cacaca; background-color: #fcfcfc;">Devices</td>
+					<td class="active" id="command_row_device_source_0" colspan="3" style="font-size: 0.8em; font-weight: bold; color: #cacaca; background-color: #fcfcfc;">SRX123Pay - 10.73.2.20</td>
+					<td class="active" id="command_row_device_dest_0" colspan="3" style="font-size: 0.8em; font-weight: bold; color: #cacaca; background-color: #fcfcfc;">SRX-other</td>
+				</tr>
+				<tr>
+					<td colspan="2"></td>
+					<td id="command_row_source_0" colspan="3" style="font-size: 0.8em;">
+							<!--{% for i in item.cmd1 %}
+							{{i}}</br>
+							{% endfor %}
+					</td>
+					<td id="command_row_dest_0" colspan="3" style="font-size: 0.8em;">
+						{% for i in item.cmd2 %}
+							{{i}}</br>
+						{% endfor %}
+					</td>
+				</tr>
+			</table>
+			{% endfor %}
+			{% endif %}-->
+    </div>
+<script type="text/javascript" >
+$( "#reset" ).click(function() {
+  $('#textarea').val('');
+});
+ 
+</script>
+{% endblock %}	

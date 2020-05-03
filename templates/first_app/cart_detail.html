@@ -1,0 +1,47 @@
+{% extends "first_app/base.html" %}
+{% block block_body %}
+	{% load staticfiles %}	
+	<div class="container"></div>
+	<h1>Thông tin giỏ hàng</h1>	
+	<table class="table">
+		<thead class="danger">
+			<th>Sản phẩm</th>
+			<th>Tên sản phẩm</th>
+			<th>Số lượng</th>			
+			<th>Đơn giá (vnđ)</th>
+			<th>Thành tiền (vnđ)</th>			
+			<th>Xóa</th>
+		</thead>
+		<tbody>
+			{% for item in cart %}				
+				<tr class="success">
+					<td>
+					<a href="{% url 'chitiet' item.product.pk%}" ><img src="{{item.product.image.url}}" style="width:300px"></a>
+					</td>
+					<td>{{item.product.name}}</td>					
+					<td>
+					<form action = "{% url 'cart_add' item.product.pk%}" method = "post">
+						{{item.update_quantity_form.quantity}}
+						{{item.update_quantity_form.update}}
+						<input type ="submit" value = "Cập nhật"/>
+						{% csrf_token %}						
+					</form>
+					</td>							
+					<td>{{item.fee}}</td>
+					<td>{{item.total_fee}}</td>
+					
+					<td><a href="{% url 'cart_remove' item.product.pk%}">Xóa</a></td>		
+				</tr>				
+			{% endfor %}	
+			<tr class='total'>
+			<td colspan="4"></td>
+			<td class="num">Tổng: {{cart.get_total_fee}} vnđ</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="text-right">
+		<a href="{% url 'muahang' %}" class="button light">Tiếp tục mua hàng</a>
+		<a href="{% url 'order_create' %}" class="btn btn-primary">Thanh toán</a> 
+	</p>
+	</div>
+{% endblock %}

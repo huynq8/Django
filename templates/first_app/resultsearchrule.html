@@ -1,0 +1,133 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/fh-3.1.6/datatables.min.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/fh-3.1.6/datatables.min.js"></script>
+<style>
+    .table-responsive {
+        display: table;
+    }
+</style>
+
+<div class="panel-heading">
+    <h4>
+        <button name="generate-command" type="submit" class="btn btn-primary" id="hide">Display
+            configuration only</button>
+        <button name="generate-command" type="submit" class="btn btn-success" id="display">Display all
+            ticket</button>
+    </h4>
+
+</div>
+<table class="table table-striped table-bordered" style="width:100%" id="dtBasicExample">
+    <thead>
+        <tr>
+            <th>
+                Configuration
+            </th>
+            <th>
+                Device
+            </th>
+            <th>
+                Note
+            </th>
+            <th style="display:none">
+                Ticket ID
+            </th>
+            <th style="display:none">
+            Protocol
+            </th>
+            <th style="display:none">
+            Source VLAN
+            </th>
+            <th style="display:none">
+            Source IP
+            </th>
+            <th style="display:none">
+            Source Port
+            </th>
+            <th style="display:none">
+            Dest VLAN
+            </th>
+            <th style="display:none">
+            Dest IP
+            </th>
+            <th style="display:none">
+            Dest Port
+            </th>
+
+
+
+        </tr>
+    </thead>
+
+
+    <tbody>
+        {% for key,value in result.items %}
+        {% for key1,value1 in value.items %}
+        {% for key2,value2 in value1.items %}
+        <tr>
+            <td>
+                <pre style="white-space: pre-line;">
+                                    {{value2.config}}
+                                </pre>
+            </td>
+            <td>
+                {{key}}
+            </td>
+            <td>
+                {{key1}}
+            </td>
+            <td style= "display:none">
+                {{value2.term}}
+            </td>
+            <td style= "display:none">
+                {{value2.protocol}}
+            </td>
+            <td style= "display:none">
+                {{value2.fzone}}
+            </td>
+            <td style= "display:none">
+                {{value2.sourceip}}
+            </td>
+            <td style= "display:none">
+                {{value2.sourceport}}
+            </td>
+            <td style= "display:none">
+                {{value2.dzone}}
+            </td>
+            <td style= "display:none">
+                {{value2.destip}}
+            </td>
+            <td style= "display:none">
+                {{value2.destport}}
+            </td>
+
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+<script>
+    $("#hide").click(function (e) {
+        event.preventDefault()
+
+        //$('#divtable td:nth-child(1)').hide();
+        //$('#divtable th:nth-child(1)').hide();
+        for (var i = 4; i < 12; i++) {
+            $('#dtBasicExample td:nth-child(' + i + ')').hide();
+            $('#dtBasicExample th:nth-child(' + i + ')').hide();
+        }
+
+    })
+    $("#display").click(function (e) {
+        event.preventDefault()
+        for (var i = 4; i < 12; i++) {
+            $('#dtBasicExample td:nth-child(' + i + ')').show();
+            $('#dtBasicExample th:nth-child(' + i + ')').show();
+        }
+    })
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable();
+    });
+</script>

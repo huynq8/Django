@@ -1,0 +1,112 @@
+{% extends "first_app/base.html" %}
+{% block block_body %}
+{% load static %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-8">
+			<input type="file" class="form-control-file" name="textfile" id="FileID">
+		</div>
+	</div>
+	<div style="margin-top:20px;" class="row row-cols-2 align-baseline">
+		<div class="col">
+			<form  method="POST" id="formcontent">
+			{% csrf_token %}
+				<textarea style="height:300px;" name="content" id="content" type="text" class="form-control" placeholder="Nhập nội dung cần convert vào đây"></textarea>
+			</form>
+		</div>
+		<div class="col">
+			<form id="outputform" >
+				<textarea style="height:300px;" type="text" id="output" name="output" class="form-control" placeholder="Kết quả" readonly></textarea>
+			</form>
+			
+		</div>
+
+	</div>
+	<div class="row" style="margin-top:20px;margin-bottom:20px;">
+		<div class="col">
+			<button name="generate-command" type="submit" class="btn-lg btn-success" id="generate" form="formcontent">Convert</button>
+			<button type="reset" class="btn-lg btn-danger" value="Reset" id="reset">Clear all</button>		
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function myFunction() {
+    document.getElementById("formcontent").reset();
+}
+//this function used to display information file
+function readSingleFile(evt) {
+    //Retrieve the first (and only!) File from the FileList object
+    var f = evt.target.files[0]; 
+
+    if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+	      var contents = e.target.result;
+        alert( "Got the file.n" 
+              +"name: " + f.name + "n"
+              +"type: " + f.type + "n"
+              +"size: " + f.size + " bytesn"
+              + "starts with: " + contents.substr(1, contents.indexOf("n"))
+        );  
+      }
+      r.readAsText(f);
+    } else { 
+      alert("Failed to load file");
+    }
+  }
+ //this function used to load file content to html
+document.getElementById('FileID')
+  .addEventListener('change', getFile)
+
+function getFile(event) {
+	const input = event.target
+  if ('files' in input && input.files.length > 0) {
+	  placeFileContent(
+      document.getElementById('content'),
+      input.files[0])
+  }
+}
+
+function placeFileContent(target, file) {
+	readFileContent(file).then(content => {
+  	target.value = content
+  }).catch(error => console.log(error))
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+  document.getElementById('FileID').addEventListener('change', readSingleFile, false);
+ $(document).ready( function() {
+	$( "#reset" ).click(function(e) {
+	$('#content').val("");
+	$('#output').val("");
+	$('#FileID').val("");
+});
+$(document).on('submit', '#formcontent',function(e){
+	event.preventDefault();
+	console.log("form submitted!")  // sanity check
+    $.ajax({
+		headers: { "X-CSRFToken": $.cookie("csrftoken") },
+        type:'POST',
+        url:'{% url "tool" "hitcount" %}',
+        data:{
+            content:$('#content').val(),
+        },
+        success:function(json){
+            $("#output").val(json.result)
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+});
+})
+</script>
+{% endblock %}	

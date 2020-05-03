@@ -1,0 +1,89 @@
+<style>
+    .table-responsive {
+    display: table;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    LIST RULE ACL TABLE
+                </h4>
+            </div>
+            <table class=" table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Ticket ID
+                        </th>
+                        <th>
+                            Protocol
+                        </th>
+                        <th>
+                            Source VLAN
+                        </th>
+                        <th>
+                            Source IP
+                        </th>
+                        <th>
+                            Source Port
+                        </th>
+                        <th>
+                            Dest VLAN
+                        </th>
+                        <th>
+                            Dest IP
+                        </th>
+                        <th>
+                            Dest Port
+                        </th>
+                        <th>
+                            Configuration
+                        </th>
+
+
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    {% for key,value in result.items %}
+                    <tr>
+                        <td>
+                            {{value.term}}
+                        </td>
+                        <td>
+                            {{value.protocol}}
+                        </td>
+                        <td>
+                            {{value.fzone}}
+                        </td>
+                        <td>
+                            {{value.sourceip}}
+                        </td>
+                        <td>
+                            {{value.sourceport}}
+                        </td>
+                        <td>
+                            {{value.dzone}}
+                        </td>
+                        <td>
+                            {{value.destip}}
+                        </td>
+                        <td>
+                            {{value.destport}}
+                        </td>
+                        <td>
+                            {{value.config}}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>>
