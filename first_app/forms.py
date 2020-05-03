@@ -3,6 +3,7 @@ Created on Nov 5, 2017
 
 @author: LAP11401-local
 '''
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.db import models
 from django import forms
