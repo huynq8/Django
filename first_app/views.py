@@ -134,7 +134,6 @@ def resultsearchrule(request, id=None):
             
             return render(request, 'first_app/resultsearchrule.html',context={"result":str(response_data)})
         else:
-            print(fromJs['content'])
             #reg = web.list_regular(fromJs['content'])
             for name in dict_file:
                 file_name = name
@@ -143,7 +142,6 @@ def resultsearchrule(request, id=None):
                 #print(list_command)
                 result_func = web.search_rule(file_name,list_command,list_ip)
                 response_data['result'].update(result_func)
-                print(response_data)
                 #pprint.pprint(response_data)
             dict_file.clear()
             return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result'])})    
