@@ -1,13 +1,15 @@
 {% extends "first_app/base.html" %}
 {% block block_body %}
 {% load static %}
-
-<div class="container">
-	<div class="row">
-		<div class="col-8">
-			<input type="file" class="form-control-file" name="textfile" id="FileID">
-		</div>
-	</div>
+<div style="margin-left: 250px;" class="container-fluid">
+        <div id="container" class="row">
+            <div class="col-8" id="container">
+                <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
+                <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
+    
+            </div>
+        </div>
+		<div class="list-group" id="filelist"></div>
 	<div style="margin-top:20px;" class="row row-cols-2 align-baseline">
 		<div class="col">
 			<form  method="POST" id="formcontent">
@@ -30,7 +32,56 @@
 		</div>
 	</div>
 </div>
+<script src="{% static 'js/plupload.full.min.js' %}"></script>
 <script type="text/javascript">
+// Custom example logic
+var uploader = new plupload.Uploader({
+        headers: { "X-CSRFToken": $.cookie("csrftoken") },
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'pickfiles', // you can pass an id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        //url: '{% url "tool" "searchrule" %}',
+        url: '{% url "tool" "resultconvertjunos" %}',
+        flash_swf_url: "{% static 'js/Moxie.swf' %}",
+        silverlight_xap_url: "{% static '/js/Moxie.xap' %}",
+
+        filters: {
+            max_file_size: '100mb',
+            mime_types: [
+                { title: "Image files", extensions: "txt,jpg,gif,png" },
+                { title: "Zip files", extensions: "zip" }
+            ]
+        },
+
+        init: {
+            PostInit: function () {
+                document.getElementById('filelist').innerHTML = '';
+
+                document.getElementById('uploadfiles').onclick = function () {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            FilesAdded: function (up, files) {
+                plupload.each(files, function (file) {
+                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                });
+            },
+
+            UploadProgress: function (up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                console.log(file.percent)
+
+            },
+
+            Error: function (up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            }
+        }
+    });
+
+    uploader.init();
 function myFunction() {
     document.getElementById("formcontent").reset();
 }
