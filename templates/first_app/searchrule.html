@@ -12,10 +12,7 @@
         <div class="col-8" id="container">
             <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
             <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
-            <button class="btn btn-danger">OR</button>
-            <button name="generate-command" type="submit" class="btn btn-success" onclick="display_list()"
-                id="xselectfile">Select File From
-                Server</button>
+            
 
         </div>
     </div>
@@ -129,70 +126,7 @@
             $('#divselectfile').empty();
         });
         // select file from ftp server
-        $("#qtsc").click(function (e) {
-            event.preventDefault();
-            $('#filelist').empty();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "tool" "selectfile" %}',
-                data: {
-                    content: "qtsc",
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                },
-                success: function (json) {
-                    //$("#output").text(json.result)
-                    //$("#divoutput").get("campus.html");
-                    $("#filelist").append(json);
-
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
-            });
-        });
-        $("#campus").click(function (e) {
-            event.preventDefault();
-            $('#filelist').empty();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "tool" "selectfile" %}',
-                data: {
-                    content: "campus",
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                },
-                success: function (json) {
-                    //$("#output").text(json.result)
-                    //$("#divoutput").get("campus.html");
-                    $("#filelist").append(json);
-
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
-            });
-        });
-        $("#singfarm").click(function (e) {
-            event.preventDefault();
-            $('#filelist').empty();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "tool" "selectfile" %}',
-                data: {
-                    content: "singfarm",
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                },
-                success: function (json) {
-                    //$("#output").text(json.result)
-                    //$("#divoutput").get("campus.html");
-                    $("#filelist").append(json);
-
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
-            });
-        });
-
+        
         $(document).on('submit', '#formcontent', function (e) {
             event.preventDefault();
             $('#divoutput').empty();
@@ -221,17 +155,7 @@
             });
         });
     })
-    function display_list() {
-        $('#filelist').empty();
-        var x = document.getElementById("filelistsite");
-        console.log(x.style.display)
-        if (x.style.display == "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-
+    
 </script>
 
 {% endblock %}

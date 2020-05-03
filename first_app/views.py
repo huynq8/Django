@@ -111,43 +111,7 @@ def searchrule(request, id=None):
         
     # product = Product.objects.get(pk=id)
     return render(request, 'first_app/searchrule.html')
-def selectfile(request, id=None):
-    print("xxx====",request.POST.get('content'))
-    if request.POST.get('content') == "qtsc" or request.POST.get('content') == "singfarm":
-        ftp = ftplib.FTP('116.193.74.219', 'noctool',
-        'noctool@123#')
-        #List the files in the current directory
-        #print ("File List:")
-        files = ftp.dir()
-        date_time = strftime("%Y-%m-%d", gmtime())
-        date_time ="2020-04-14"
-        ftp.cwd("QTSC/"+str((date_time)))
-        files = ftp.dir()
-        #ftp.retrlines("LIST")
-        
-        ls = []
-        #ftp.retrlines('MLSD', ls.append)
-        ftp.retrlines('LIST', ls.append)
-        list_result = ["QTSC/"+str((date_time))+"/"+re.search("(.*\s+)([\._\-a-zA-Z0-9]+)",item).group(2) for item in ls]
-        return render(request, 'first_app/selectfile.html',context={'result':list_result})
-    elif request.POST.get('content') == "campus":
-        ftp = ftplib.FTP('localhost', 'admin',
-        'admin')
-        #List the files in the current directory
-        #print ("File List:")
-        #files = ftp.dir()
-        ftp.cwd("C:\\Users\\LAP11357-local\\Downloads")
-        #files = ftp.dir()
-        #ftp.retrlines("LIST")
-        '''with open( 'test.txt', 'wb' ) as file :
-            ftp.retrbinary('RETR srx5800.txt', file.write)'''
-        ls = []
-        #ftp.retrlines('MLSD', ls.append)
-        ftp.retrlines('LIST', ls.append)
-        list_result = [re.search("(.*\s+)([\.\-a-zA-Z0-9]+)",item).group(2) for item in ls]
-        return render(request, 'first_app/selectfile.html',context={'result':list_result})
-    else:
-        return render(request, 'first_app/selectfile.html',context={'result':list_result})
+
 def resultsearchrule(request, id=None):
     if request.FILES:
         uploaded_file = request.FILES['file']
@@ -159,33 +123,7 @@ def resultsearchrule(request, id=None):
     elif request.method == "POST":
         response_data={'result':{}}
         fromJs = QueryDict(request.body)
-        try:
-            if fromJs['filename']:
-                print(fromJs['filename'])
-                ftp = ftplib.FTP('116.193.74.219', 'noctool',
-                'noctool@123#')
-                #List the files in the current directory
-                #print ("File List:")
-                ftp.dir()
-                ftp.cwd("/")
-                gFile = open("readme.txt", "wb")
-                ftp.retrbinary('RETR '+str(fromJs['filename']),gFile.write)
-                list_file = open("readme.txt",'r').readlines()    
-        except:
-            pass
-        listResult = []
-        if fromJs['content'] == "":
-            response_data = {"result": "Bạn chưa nhập dữ liệu."}
-        else:
-            list_ip = fromJs['content']
-            #print(list_command)
-            result_func = web.search_rule(fromJs['filename'],list_file,list_ip)
-            response_data['result'].update(result_func)
-           # print(response_data)
-            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result'])})
-        ######
-        #get file
-        #######
+        
 
         listResult = []
         if fromJs['content'] == "":
