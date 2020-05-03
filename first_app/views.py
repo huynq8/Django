@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-    import ftplib
+import ftplib
 import re
 import os
 # Create your views here.
