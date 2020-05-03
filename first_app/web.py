@@ -1,6 +1,5 @@
 import re
 from collections import OrderedDict
-import pandas as pd
 import collections as col
 import matplotlib.pyplot as plt
 from re import *
