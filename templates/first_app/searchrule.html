@@ -16,28 +16,7 @@
 
         </div>
     </div>
-    <div style="margin-top:20px;width:300px; display:none" id="filelistsite">
-        <ul class="list-group list-group-flush">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <a id="qtsc" class="btn-floating btn-tw btn-sm">
-
-                        <i class="fab fa-twitter"></i>
-                        QTSC LIST FILES
-                    </a></li>
-                <li class="list-group-item">
-                    <a id="campus" class="btn-floating btn-tw btn-sm">
-                        <i class="fab fa-twitter"></i>CAMPUS LIST
-                        FILES
-                    </a></li>
-                <li class="list-group-item">
-                    <a id="singfarm" class="btn-floating btn-tw btn-sm">
-                        <i class="fab fa-twitter"></i>SINGFARM LIST FILES
-                    </a></li>
-            </ul>
-        </ul>
-    </div>
-
+    
     <div class="list-group" id="filelist"></div>
     <div style="margin-top:20px; width: 600px;" class="row row-cols-2 align-baseline">
         <div class="col">
@@ -101,12 +80,6 @@
             UploadProgress: function (up, file) {
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
                 console.log(file.percent)
-                if (file.percent == 100) {
-                    document.getElementById('output').innerHTML += 'Bạn đã load file thành công:' + '\n';
-                    document.getElementById('output').innerHTML += file.name + ' (' + plupload.formatSize(file.size) + ')' + '\n';
-                    document.getElementById('output').innerHTML += '=============================================' + '\n';
-
-                }
 
             },
 
@@ -123,7 +96,6 @@
             $('#divoutput').empty();
             $('#FileID').val("");
             $('#filelist').empty();
-            $('#divselectfile').empty();
         });
         // select file from ftp server
         

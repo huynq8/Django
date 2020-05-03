@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^regular/$', views.regular, name='tool'),
     url(r'^searchrule/$', views.searchrule, name='tool'),
     url(r'^resultsearchrule/$', views.resultsearchrule, name='tool'),
-    url(r'^selectfile/$', views.selectfile, name='tool'),
     url(r'^$', views.homepage, name='homepage'),
     url(r'^(\S+)/$', views.homepage, name='tool'),
     #url(r'^resultconvertjunos', views.resultconvertjunos, name = 'resultconvertjunos'),
