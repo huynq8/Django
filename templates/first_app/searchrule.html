@@ -19,6 +19,7 @@
     
     <div class="list-group" id="filelist"></div>
     <div style="display:none" id="information" class="list-group">Xin Hãy đợi trong 3s sau đó hãy nhấn SEARCH RULE</div>
+    <div style="display:none" id="progress" class="list-group">Xin Hãy đợi Kết quả</div>
     <div style="margin-top:20px; width: 600px;" class="row row-cols-2 align-baseline">
         <div class="col">
             <form method="POST" id="formcontent">
@@ -110,6 +111,8 @@
             event.preventDefault();
             $('#divoutput').empty();
             console.log($("#file").val())  // sanity check
+            $("#information").css({"display":"none"});
+            $("#progress").css({"display":"inline-block"});
             $.ajax({
                 type: 'POST',
                 //url: '{% url "tool" "searchrule" %}',
