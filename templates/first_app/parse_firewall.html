@@ -3,30 +3,61 @@
 {% load static %}
 <!-- sử dụng Shift+Alt+F để format lại toàn bộ html  
  Ctrl+K Ctrl+F  để format selected text-->
- <div style=" margin-bottom: 30px;">
-    <h2  class="page-section-heading text-center text-uppercase text-secondary mb-0">PARSE FIREWALL</h2>
- </div>
- 
+ <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<div style=" margin-bottom: 30px;">
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">PARSE FIREWALL</h2>
+</div>
+
 <div style="margin-left: 250px;" class="container-fluid">
     <div id="container" class="row">
         <div class="col-8" id="container">
             <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
             <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
-            <button name="generate-command" style="display:none" type="button" class="btn btn-success" id="generate"
-            >SUBMIT</button>
+            <button name="generate-command" style="display:none" type="button" class="btn btn-success"
+                id="generate">SUBMIT</button>
 
         </div>
     </div>
-    
+
     <div class="list-group" id="filelist"></div>
-    <div style="display:none" id="information" class="list-group"><p>Xin Hãy đợi trong 3s sau đó hãy Submit</p></div>
-    <div style="display:none" id="progress" class="list-group"><p>Xin Hãy đợi kết quả!</p></div>
+    <div style="display:none" id="information" class="list-group">
+        <p>Xin Hãy đợi trong 3s sau đó hãy Submit</p>
+    </div>
+    <div style="display:none" id="progress" class="list-group">
+        <p>Xin Hãy đợi kết quả!</p>
+    </div>
+    <div style="margin-top:20px; width: 600px;" class="row row-cols-2 align-baseline">
+        <div class="col">
+            <form method="POST" id="formcontent">
+                {% csrf_token %}
+
+                <textarea style="height:300px;" name="content" id="content" type="text" class="form-control"
+                    placeholder="Load file theo format sau:
+set firewall family inet filter VLAN421 term T6 from source-address 10.60.30.137/32
+set firewall family inet filter VLAN421 term T6 from destination-address 10.40.21.82/32
+set firewall family inet filter VLAN421 term T6 from destination-port ftp-data
+set firewall family inet filter VLAN421 term T6 then accept
+    ...
+set security policies from-zone VLAN461 to-zone VLAN462 policy A87795_999293715 match source-address 10.40.61.14/32
+set security policies from-zone VLAN461 to-zone VLAN462 policy A87795_999293715 match destination-address 10.40.62.100/32
+set security policies from-zone VLAN461 to-zone VLAN462 policy A87795_999293715 match application tcp_d_8081
+set security policies from-zone VLAN461 to-zone VLAN462 policy A87795_999293715 then permit
+    ...
+"></textarea>
+
+            </form>
+        </div>
+
+    </div>
     <div style="margin-left: -200px; width:50%" id="divoutput"></div>
 </div>
 
-
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="{% static 'js/plupload.full.min.js' %}"></script>
 <script type="text/javascript">
+    var quill = new Quill('#content', {
+        theme: 'snow'
+    });
     // Custom example logic
     var uploader = new plupload.Uploader({
         headers: { "X-CSRFToken": $.cookie("csrftoken") },
@@ -65,11 +96,11 @@
             UploadProgress: function (up, file) {
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
                 if (file.percent == "100") {
-                    $("#information").css({"display":"inline-block"});
-                    setTimeout(function(){
-                    $("#generate").css({"display":"inline-block"})
-                    },3000);
-                    
+                    $("#information").css({ "display": "inline-block" });
+                    setTimeout(function () {
+                        $("#generate").css({ "display": "inline-block" })
+                    }, 3000);
+
                 }
 
             },
@@ -94,8 +125,8 @@
             console.log("OK")
             event.preventDefault();
             $('#divoutput').empty();
-            $("#information").css({"display":"none"});
-            $("#progress").css({"display":"inline-block"});
+            $("#information").css({ "display": "none" });
+            $("#progress").css({ "display": "inline-block" });
             $.ajax({
                 type: 'POST',
                 //url: '{% url "tool" "searchrule" %}',
