@@ -3,38 +3,46 @@
 {% load static %}
 <!-- sử dụng Shift+Alt+F để format lại toàn bộ html  
  Ctrl+K Ctrl+F  để format selected text-->
- <div style=" margin-bottom: 30px;">
-    <h2  class="page-section-heading text-center text-uppercase text-secondary mb-0">SEARCH RULE</h2>
- </div>
- 
+<div style=" margin-bottom: 30px;">
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">SEARCH RULE</h2>
+</div>
+
 <div style="margin-left: 250px;" class="container-fluid">
     <div id="container" class="row">
         <div class="col-8" id="container">
             <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
             <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
-            
+
 
         </div>
     </div>
-    
+
     <div class="list-group" id="filelist"></div>
-    <div style="display:none" id="information" class="list-group">Xin Hãy đợi trong 3s sau đó hãy nhấn SEARCH RULE</div>
+    <div style="display:none" id="information" class="list-group"> Hãy nhập IP vào ô bên dưới.<br> Xin Hãy đợi trong 3s sau đó hãy nhấn SEARCH RULE</div>
     <div style="display:none" id="progress" class="list-group">Xin Hãy đợi Kết quả</div>
     <div style="margin-top:20px; width: 600px;" class="row row-cols-2 align-baseline">
         <div class="col">
             <form method="POST" id="formcontent">
                 {% csrf_token %}
                 <textarea style="height:300px;" name="content" id="content" type="text" class="form-control"
-                    placeholder="Nhập range ip cần tìm rule vào đây .&#10;Example:&#10;192.168.1.0/24&#10;192.168.2.0/24"></textarea>
+                    placeholder="Load file theo format sau:
+set firewall family inet filter VLAN421 term T6 from source-address 10.60.30.137/32
+set firewall family inet filter VLAN421 term T6 from destination-address 10.40.21.82/32
+set firewall family inet filter VLAN421 term T6 from destination-port ftp-data
+set firewall family inet filter VLAN421 term T6 then accept
+    ...
+Nhập range ip cần tìm rule vào đây:
+Example:
+192.168.1.0/24
+192.168.2.0/24"></textarea>
 
             </form>
         </div>
 
     </div>
-    
+
     <div class="row" style="margin-top:20px;margin-bottom:20px;">
         <div class="col">
-
             <button name="generate-command" type="submit" class="btn btn-success" id="generate"
                 form="formcontent">SEARCH RULE</button>
             <button type="reset" class="btn btn-danger" value="Reset" id="reset">Clear all</button>
@@ -83,11 +91,11 @@
             UploadProgress: function (up, file) {
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
                 if (file.percent == "100") {
-                    $("#information").css({"display":"inline-block"});
-                    setTimeout(function(){
-                    $("#generate").css({"display":"inline-block"})
-                    },3000);
-                    
+                    $("#information").css({ "display": "inline-block" });
+                    setTimeout(function () {
+                        $("#generate").css({ "display": "inline-block" })
+                    }, 3000);
+
                 }
 
             },
@@ -106,13 +114,13 @@
             $('#filelist').empty();
         });
         // select file from ftp server
-        
+
         $(document).on('submit', '#formcontent', function (e) {
             event.preventDefault();
             $('#divoutput').empty();
             console.log($("#file").val())  // sanity check
-            $("#information").css({"display":"none"});
-            $("#progress").css({"display":"inline-block"});
+            $("#information").css({ "display": "none" });
+            $("#progress").css({ "display": "inline-block" });
             $.ajax({
                 type: 'POST',
                 //url: '{% url "tool" "searchrule" %}',
@@ -137,7 +145,7 @@
             });
         });
     })
-    
+
 </script>
 
 {% endblock %}
