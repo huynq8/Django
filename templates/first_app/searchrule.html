@@ -18,6 +18,7 @@
     </div>
     
     <div class="list-group" id="filelist"></div>
+    <div style="display:none" id="information" class="list-group">Xin Hãy đợi trong 3s sau đó hãy nhấn SEARCH RULE</div>
     <div style="margin-top:20px; width: 600px;" class="row row-cols-2 align-baseline">
         <div class="col">
             <form method="POST" id="formcontent">
@@ -29,6 +30,7 @@
         </div>
 
     </div>
+    
     <div class="row" style="margin-top:20px;margin-bottom:20px;">
         <div class="col">
 
@@ -79,10 +81,15 @@
 
             UploadProgress: function (up, file) {
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                console.log(file.percent)
+                if (file.percent == "100") {
+                    $("#information").css({"display":"inline-block"});
+                    setTimeout(function(){
+                    $("#generate").css({"display":"inline-block"})
+                    },3000);
+                    
+                }
 
             },
-
             Error: function (up, err) {
                 document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
             }

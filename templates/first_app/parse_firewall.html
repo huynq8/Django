@@ -12,13 +12,14 @@
         <div class="col-8" id="container">
             <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
             <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
-            <button name="generate-command" type="button" class="btn btn-success" id="generate"
+            <button name="generate-command" style="display:none" type="button" class="btn btn-success" id="generate"
             >SUBMIT</button>
 
         </div>
     </div>
     
     <div class="list-group" id="filelist"></div>
+    <div style="display:none" id="information" class="list-group">Xin Hãy đợi trong 3s sau đó hãy Submit</div>
     
     <div style="margin-left: -200px; width:50%" id="divoutput"></div>
 </div>
@@ -63,7 +64,13 @@
 
             UploadProgress: function (up, file) {
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                console.log(file.percent)
+                if (file.percent == "100") {
+                    $("#information").css({"display":"inline-block"});
+                    setTimeout(function(){
+                    $("#generate").css({"display":"inline-block"})
+                    },3000);
+                    
+                }
 
             },
 
