@@ -320,7 +320,7 @@ def xuat_rule_srx(file,vlan_info):#,hit_count):
             config.append(line)
             line = line[line.find('destination-address') + 20:].strip()
             destIP.append(line)
-        elif "protocol" in line:
+        elif "from protocol" in line:
             config.append(line)
             protocol.append(line[line.find('protocol') + 9:].strip())
         elif "source-port" in line:
@@ -342,7 +342,7 @@ def xuat_rule_srx(file,vlan_info):#,hit_count):
             if m!=1:
                 destport.append(line[line.find('destination-port') + 17:].strip())
 
-        elif 'application' in line:  # used for SRX
+        elif 'match application' in line:  # used for SRX
             config.append(line)
             line = line[line.find('application') + 12:]
             application.append(line)

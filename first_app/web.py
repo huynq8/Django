@@ -276,3 +276,18 @@ def search_rule(file_name,file,list_ip):
 #listip = "1.1.1.1"
 #file = open(r"C:\Users\LAP11357-local\Downloads\ex9214.txt",'r').readlines()
 #pprint(search_rule(filename, file, listip))     
+def parse_rule(file_name, file):
+    dict_result = {}
+    dict_rule,dict_rule_config = xuat_rule_srx(file,[])
+    dict_result.update([(file_name,{'dict_rule':dict_rule})])
+    for filename in dict_result:
+        for type_policy in dict_result[file_name]:
+            for key in dict_result[file_name][type_policy]:
+                policy = dict_result[file_name][type_policy][key]
+                policy['config']="\n".join(policy['config'])
+                policy['sourceip']="\n".join(policy['sourceip'])
+                policy['destip']="\n".join(policy['destip'])
+                policy['protocol']="\n".join(policy['protocol'])
+                policy['sourceport']="\n".join(policy['sourceport'])
+                policy['destport']="\n".join(policy['destport'])
+    return dict_result

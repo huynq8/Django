@@ -82,34 +82,6 @@ def hitcount(request, id=None):
 
 
 def searchrule(request, id=None):
-    if request.FILES:
-        uploaded_file = request.FILES['file']
-        str_text = ''
-        for line in uploaded_file:
-            str_text = str_text + line.decode()  # "str_text" will be of `str` type
-        dict_file.update([(str(request.FILES['file']),str_text)])
-
-    # do something
-    elif request.method == "POST":
-        print('ok')
-        fromJs = QueryDict(request.body)
-        listResult = []
-        response_data = {}
-        if fromJs['content'] == "":
-            response_data = {"result": "Bạn chưa nhập dữ liệu."}
-            return JsonResponse(response_data)
-        else:
-            reg = web.list_regular(fromJs['content'])
-            for list_config in dict_file:
-                list_command = dict_file[list_config].splitlines()
-                #print(list_command)
-                response_data, response_data_cfg = web.search_rule(list_command,reg)
-                response_data['result'] = str(response_data)
-                #pprint.pprint(response_data)
-            dict_file.clear()
-            return JsonResponse(response_data)
-        
-    # product = Product.objects.get(pk=id)
     return render(request, 'first_app/searchrule.html')
 
 def resultsearchrule(request, id=None):
@@ -202,92 +174,29 @@ def result_generate_campus(request, id=None):
         dstPort = dict_val['dstPort']
         dstIp  = dict_val['dstIp']
     return render(request, 'first_app/campus.html')
-
-
-def cart_add(request, product_id=None):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    form = CardAddProductForm(request.POST)
-    if form.is_valid():
-        cd = form.cleaned_data
-        cart.add(product=product,
-                 quantity=cd['quantity'], update_quantity=cd['update'])
-
-    return redirect('cart_detail')
-
-
-def cart_remove(request, product_id=None):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    cart.remove(product)
-    return redirect('cart_detail')
-
-
-def cart_detail(request):
-    cart = Cart(request)
-    for item in cart:
-        # print(item)
-        item['update_quantity_form'] = CardAddProductForm(
-            initial={'quantity': item['quantity'], 'update': True})
-    return render(request, 'first_app/cart_detail.html', {'cart': cart})
-
-
-def order_create(request):
-    cart = Cart(request)
-    form = OrderCreateForm()
-    if request.method == 'POST':
-        print("I'm here")
-        form = OrderCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save()
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order, product=item['product'], price=item['fee'], quantity=item['quantity'])
-                # clear the cart
-                cart.clear()
-
-                # order_created.display(order.id)
-                return render(request, 'first_app/created.html', context={'order': order})
-    else:
-        form = OrderCreateForm()
-
-    return render(request, 'first_app/create.html', context={'form': form, 'cart': cart})
-
-
-def result(request):
-    result_list = []
-    ten_xe = Product.objects.order_by("name")
-    if request.method == "GET":
-        word = request.GET.get('word')
-    for item in ten_xe:
-        if str(word).lower() in str(item).lower():
-            result_list.append(item)
-    return render(request, 'first_app/search.html', context={'result': result_list})
-
-
-def contact(request):
-    name_ = request.POST.get('fullname')
-    email_ = request.POST.get('email')
-    message_ = request.POST.get('message')
-    phone_ = request.POST.get('phone')
-    Contact.objects.create(name=str(name_), email=str(
-        email_), message=str(message_), phone=str(phone_))
-
-    return render(request, 'first_app/contact.html')
-
-
-'''def resultconvertjunos(request):
-    response_data = {}
-    print("===================")
-    print(request)
-    # change từ encode request http to string python
-    fromJs = QueryDict(request.body)
-     # now we can load our JSON from JS
-    # open('output.txt','w').write((Input))
-    # input1 = open('output.txt','r').read()  
-    result1 = web.convert_junos_fun(fromJs['content'])
-    result = "\n".join(result1)
-    response_data['result']= result
-    print(response_data)
-    # return render(request, 'first_app/convertjunos.html', context={'result':result,'input':input1})   
-    return JsonResponse(response_data)'''
+def parse_firewall(request, id=None):
+    return render(request, 'first_app/parse_firewall.html')
+def result_parse_firewall(request, id=None):
+    if request.FILES:
+        uploaded_file = request.FILES['file']
+        str_text = ''
+        for line in uploaded_file:
+            str_text = str_text + line.decode()  # "str_text" will be of `str` type
+        file_name_upload = str(request.FILES['file'])
+        with open(file_name_upload,'w') as f:
+            f.write(str_text)
+        dict_file.update([(str(request.FILES['file']),file_name_upload)])
+        #print(dict_file)
+    elif request.method == "POST":
+        response_data={'result':{}}
+        for name in dict_file:
+            file_name = name
+            list_command = open(file_name,'r').readlines()
+            result_func = web.parse_rule(file_name,list_command)
+            response_data['result'].update(result_func)
+        dict_file.clear()
+        #print("====++++++++++++++++++++",response_data['result'])
+        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result'])})
+    return render(request, 'first_app/result_parse_firewall.html')
+    # do something
+     

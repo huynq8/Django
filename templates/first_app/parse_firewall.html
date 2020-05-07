@@ -1,0 +1,117 @@
+{% extends "first_app/base.html" %}
+{% block block_body %}
+{% load static %}
+<!-- sử dụng Shift+Alt+F để format lại toàn bộ html  
+ Ctrl+K Ctrl+F  để format selected text-->
+ <div style=" margin-bottom: 30px;">
+    <h2  class="page-section-heading text-center text-uppercase text-secondary mb-0">SEARCH RULE</h2>
+ </div>
+ 
+<div style="margin-left: 250px;" class="container-fluid">
+    <div id="container" class="row">
+        <div class="col-8" id="container">
+            <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file configuration...</a>
+            <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
+            <button name="generate-command" type="button" class="btn btn-success" id="generate"
+            >SEARCH RULE</button>
+
+        </div>
+    </div>
+    
+    <div class="list-group" id="filelist"></div>
+    
+    <div style="margin-left: -200px; width:50%" id="divoutput"></div>
+</div>
+
+
+<script src="{% static 'js/plupload.full.min.js' %}"></script>
+<script type="text/javascript">
+    // Custom example logic
+    var uploader = new plupload.Uploader({
+        headers: { "X-CSRFToken": $.cookie("csrftoken") },
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'pickfiles', // you can pass an id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        //url: '{% url "tool" "searchrule" %}',
+        url: '{% url "tool" "result_parse_firewall" %}',
+        flash_swf_url: "{% static 'js/Moxie.swf' %}",
+        silverlight_xap_url: "{% static '/js/Moxie.xap' %}",
+
+        filters: {
+            max_file_size: '100mb',
+            mime_types: [
+                { title: "Image files", extensions: "txt,jpg,gif,png" },
+                { title: "Zip files", extensions: "zip" }
+            ]
+        },
+
+        init: {
+            PostInit: function () {
+                document.getElementById('filelist').innerHTML = '';
+
+                document.getElementById('uploadfiles').onclick = function () {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            FilesAdded: function (up, files) {
+                plupload.each(files, function (file) {
+                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                });
+            },
+
+            UploadProgress: function (up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                console.log(file.percent)
+
+            },
+
+            Error: function (up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            }
+        }
+    });
+
+    uploader.init();
+    $(document).ready(function () {
+        $("#reset").click(function (e) {
+            $('#content').val("");
+            $('#divoutput').empty();
+            $('#FileID').val("");
+            $('#filelist').empty();
+        });
+        // select file from ftp server
+
+        $("#generate").click(function (e) {
+            console.log("OK")
+            event.preventDefault();
+            $('#divoutput').empty();
+            $.ajax({
+                type: 'POST',
+                //url: '{% url "tool" "searchrule" %}',
+                url: '{% url "tool" "result_parse_firewall" %}',
+                data: {
+                    content: $('#content').val(), filename: $('#file').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                //$(selector).post(URL,data,function(data,status,xhr),dataType)
+                success: function (json) {
+                    //$("#output").text(json.result)
+                    //$("#divoutput").get("campus.html");
+                    $("#divoutput").append(json);
+                    console.log("ok")
+
+                },
+
+
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        });
+    })
+
+</script>
+
+{% endblock %}
