@@ -136,10 +136,12 @@ def resultsearchrule(request, id=None):
                             application = rule_detail['application']
                             protocol = rule_detail['protocol']
                             source_vlan = rule_detail['fzone']
+                            source_ip = rule_detail['sourceip']
+                            dest_ip = rule_detail['destip']
                             dest_vlan = rule_detail['tzone']
                             source_port = rule_detail['sourceport']
                             dest_port = rule_detail['destport']
-                            writer.writerow([conf,rule_type_delete,device,term_name,application,protocol,source_vlan,dest_vlan,source_port,dest_port])
+                            writer.writerow([conf,device,term_name,application,protocol,source_vlan,source_ip,source_port,dest_vlan,dest_ip,dest_port])
             my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
             shutil.move(my_file_source, my_file_dest)
             return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})    
@@ -238,10 +240,12 @@ def result_parse_firewall(request, id=None):
                         application = rule_detail['application']
                         protocol = rule_detail['protocol']
                         source_vlan = rule_detail['fzone']
+                        source_ip = rule_detail['sourceip']
                         dest_vlan = rule_detail['tzone']
+                        dest_ip = rule_detail['destip']
                         source_port = rule_detail['sourceport']
                         dest_port = rule_detail['destport']
-                        writer.writerow([conf,device,term_name,application,protocol,source_vlan,dest_vlan,source_port,dest_port])
+                        writer.writerow([conf,device,term_name,application,protocol,source_vlan,source_ip,source_port,dest_vlan,dest_ip,dest_port])
         my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
         shutil.move(my_file_source, my_file_dest)
         #print("====++++++++++++++++++++",response_data['result'])
