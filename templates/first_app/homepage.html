@@ -3,104 +3,89 @@
 {% block block_body %}
 {% load static %}
 <div class="album py-5 bg-light">
-	<div class="container">
-		<div class="row">
-			{% if product %}
-			{% for value in product %}
-			<!-- Portfolio Item 1 -->
-			<!-- Portfolio Modal 1 -->
-			<div class="portfolio-modal modal fade" id={{value.name}} tabindex="-1" role="dialog"
-				aria-labelledby="portfolioModal1Label" aria-hidden="true">
-				<div class="modal-dialog modal-xl" role="document">
-					<div class="modal-content">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">
-								<i class="fas fa-times"></i>
-							</span>
-						</button>
-						<div class="modal-body text-center">
-							<div class="container">
-								<div class="row justify-content-center">
-									<div class="col-lg-8">
-										<!-- Portfolio Modal - Title -->
-										<h2
-											class="portfolio-modal-title text-secondary text-uppercase mb-0">
-											{{value.description}}
-										</h2>
-										<!-- Icon Divider -->
-										<div
-											class="divider-custom">
-											<div
-												class="divider-custom-line">
-											</div>
-											<div
-												class="divider-custom-icon">
-												<i
-													class="fas fa-star"></i>
-											</div>
-											<div
-												class="divider-custom-line">
-											</div>
-										</div>
-										<!-- Portfolio Modal - Image -->
-										<img style="width:500px;height:200px;"
-											class="img-fluid rounded mb-5"
-											src="{{value.image.url}}"
-											alt="">
-										<!-- Portfolio Modal - Text -->
-										<p class="mb-5">
-											{{value.content}}.
-										</p>
-										<button id="button"
-											class="btn btn-primary"
-											onclick="window.location.href ='{% url 'tool' value.name%}'"
-											;
-											onclick="window.location.href ='#portfolio'"
-											;>
-											Go to
-										</button>
-										<button class="btn btn-primary"
-											href="#"
-											data-dismiss="modal">
-											<i
-												class="fas fa-times fa-fw"></i>
-											Close
-											Window
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+    <div class="container">
+        <div class="row">
+            {% if product %}
+            {% for value in product %}
+            <!-- Portfolio Item 1 -->
+            <!-- Portfolio Modal 1 -->
+            <div class="portfolio-modal modal fade" id={{value.name}} tabindex="-1" role="dialog"
+                aria-labelledby="portfolioModal1Label" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </button>
+                        <div class="modal-body text-center">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-8">
+                                        <!-- Portfolio Modal - Title -->
+                                        <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">
+                                            {{value.description}}
+                                        </h2>
+                                        <!-- Icon Divider -->
+                                        <div class="divider-custom">
+                                            <div class="divider-custom-line">
+                                            </div>
+                                            <div class="divider-custom-icon">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="divider-custom-line">
+                                            </div>
+                                        </div>
+                                        <!-- Portfolio Modal - Image -->
+                                        <img style="width:500px;height:200px;" class="img-fluid rounded mb-5"
+                                            src="{{value.image.url}}" alt="">
+                                        <!-- Portfolio Modal - Text -->
+                                        <p class="mb-5">
+                                            {{value.content}}.
+                                        </p>
+                                        <button id="button" class="btn btn-primary"
+                                            onclick="window.location.href ='{% url 'tool' value.name%}'" ;
+                                            onclick="window.location.href ='#portfolio'" ;>
+                                            Go to
+                                        </button>
+                                        <button class="btn btn-primary" href="#" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close
+                                            Window
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<!-- Portfolio Grid Items -->
+            <!-- Portfolio Grid Items -->
 
 
-			<div class="col-md-6 col-lg-4">
-				<div class="portfolio-item mx-auto" data-toggle="modal"
-					data-target="#{{value.name}}">
-					<div
-						class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div
-							class="portfolio-item-caption-content text-center text-white">
-							<i class="fas fa-plus fa-3x"></i>
-						</div>
-					</div>
-					<div>
-						<img style="width:500px;height:200px;" class="img-fluid"
-							src="{{value.image.url}}" alt="">
-						<div class="centered">{{value.description}}</div>
-					</div>
-				</div>
-			</div>
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#{{value.name}}">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <img style="width:500px;height:200px;" class="img-fluid" src="{{value.image.url}}" alt="">
+                        <div class="centered">
+                            <h6>
+                                {{value.description}}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			{% endfor %}
-			{% endif%}
-		</div>
-	</div>
+            {% endfor %}
+            {% endif%}
+        </div>
+    </div>
 </div>
 
 {% endblock %}
