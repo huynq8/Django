@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import ftplib
 import re
 import os
+import shutil
+import csv
 # Create your views here.
 from first_app import forms
 from first_app.models import Product
@@ -116,7 +118,25 @@ def resultsearchrule(request, id=None):
                 response_data['result'].update(result_func)
                 #pprint.pprint(response_data)
             dict_file.clear()
-            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result'])})    
+            with open(file_name+'.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Configuration","Rule Type delete", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
+                for filename in response_data['result']:
+                    for dict_rule in response_data['result'][filename]:
+                        for rule in  response_data['result'][filename][dict_rule]:
+                            rule_detail = response_data['result'][filename][dict_rule][rule]
+                            conf = rule_detail['config']
+                            rule_type_delete = dict_rule
+                            device = filename
+                            term_name = rule_detail['term']
+                            protocol = rule_detail['protocol']
+                            source_vlan = rule_detail['fzone']
+                            dest_vlan = rule_detail['tzone']
+                            source_port = rule_detail['sourceport']
+                            dest_port = rule_detail['destport']
+                            writer.writerow([conf,rule_type_delete,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
+            shutil.move(file_name+'.csv', 'static'+"/"+file_name+".csv")
+            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})    
     return render(request, 'first_app/resultsearchrule.html')
 def regular(request, id=None):
     response_data = {}
@@ -195,8 +215,25 @@ def result_parse_firewall(request, id=None):
             result_func = web.parse_rule(file_name,list_command)
             response_data['result'].update(result_func)
         dict_file.clear()
+        with open(file_name+'.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Configuration", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
+            for filename in response_data['result']:
+                for dict_rule in response_data['result'][filename]:
+                    for rule in  response_data['result'][filename][dict_rule]:
+                        rule_detail = response_data['result'][filename][dict_rule][rule]
+                        conf = rule_detail['config']
+                        device = filename
+                        term_name = rule_detail['term']
+                        protocol = rule_detail['protocol']
+                        source_vlan = rule_detail['fzone']
+                        dest_vlan = rule_detail['tzone']
+                        source_port = rule_detail['sourceport']
+                        dest_port = rule_detail['destport']
+                        writer.writerow([conf,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
+        shutil.move(file_name+'.csv', 'static'+"/"+file_name+".csv")
         #print("====++++++++++++++++++++",response_data['result'])
-        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result'])})
+        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})
     return render(request, 'first_app/result_parse_firewall.html')
     # do something
      

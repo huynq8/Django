@@ -6,105 +6,111 @@
         display: table;
     }
 </style>
+
 <div class="container">
-<div class="panel-heading row">
-    <h4>
-        <button name="generate-command" type="submit" class="btn btn-primary" id="hide">Display
-            configuration only</button>
-        <button name="generate-command" type="submit" class="btn btn-success" id="display">Display all
-            ticket</button>
-    </h4>
-
+    <div class="panel-heading row">
+        <div class="col-8"></div>
+        <h2>
+            <button name="generate-command" type="submit" class="btn btn-primary" id="hide">Display
+                configuration only</button>
+            <button name="generate-command" type="submit" class="btn btn-success" id="display">Display all
+                ticket</button>
+        </h2>
+        <h2>
+            <a href="{% static filename %}" class="btn btn-secondary" download=filename.csv>Download
+                File</a>
+        </h2>
+    </div>
 </div>
-<div class="row"> 
-<table class="table table-striped table-bordered" style="width:50%" id="dtBasicExample">
-    <thead>
-        <tr>
-            <th>
-                Configuration
-            </th>
-            <th>
-                Device
-            </th>
+<div class="row">
+    <table class="table table-striped table-bordered" style="width:50%" id="dtBasicExample">
+        <thead>
+            <tr>
+                <th>
+                    Configuration
+                </th>
+                <th>
+                    Device
+                </th>
 
-            <th>
-                Policy/Term name
-            </th>
-            <th>
-                Protocol
-            </th>
-            <th>
-                Source VLAN
-            </th>
-            <th>
-                Source IP
-            </th>
-            <th>
-                Source Port
-            </th>
-            <th>
-                Dest VLAN
-            </th>
-            <th>
-                Dest IP
-            </th>
-            <th>
-                Dest Port
-            </th>
-
-
-
-        </tr>
-    </thead>
+                <th>
+                    Policy/Term name
+                </th>
+                <th>
+                    Protocol
+                </th>
+                <th>
+                    Source VLAN
+                </th>
+                <th>
+                    Source IP
+                </th>
+                <th>
+                    Source Port
+                </th>
+                <th>
+                    Dest VLAN
+                </th>
+                <th>
+                    Dest IP
+                </th>
+                <th>
+                    Dest Port
+                </th>
 
 
-    <tbody>
-        {% for key,value in result.items %}
-        {% for key1,value1 in value.items %}
-        {% for key2,value2 in value1.items %}
-        <tr>
-            <td>
-                <pre style="white-space: pre-line;">
+
+            </tr>
+        </thead>
+
+
+        <tbody>
+            {% for key,value in result.items %}
+            {% for key1,value1 in value.items %}
+            {% for key2,value2 in value1.items %}
+            <tr>
+                <td>
+                    <pre style="white-space: pre-line;">
                                     {{value2.config}}
                                 </pre>
-            </td>
-            <td>
-                {{key}}
-            </td>
+                </td>
+                <td>
+                    {{key}}
+                </td>
 
-            <td>
-                {{value2.term}}
-            </td>
-            <td>
-                {{value2.protocol}}
-            </td>
-            <td>
-                {{value2.fzone}}
-            </td>
-            <td>
-                {{value2.sourceip}}
-            </td>
-            <td>
-                {{value2.sourceport}}
-            </td>
-            <td>
-                {{value2.dzone}}
-            </td>
-            <td>
-                {{value2.destip}}
-            </td>
-            <td>
-                {{value2.destport}}
-            </td>
+                <td>
+                    {{value2.term}}
+                </td>
+                <td>
+                    {{value2.protocol}}
+                </td>
+                <td>
+                    {{value2.fzone}}
+                </td>
+                <td>
+                    {{value2.sourceip}}
+                </td>
+                <td>
+                    {{value2.sourceport}}
+                </td>
+                <td>
+                    {{value2.dzone}}
+                </td>
+                <td>
+                    {{value2.destip}}
+                </td>
+                <td>
+                    {{value2.destport}}
+                </td>
 
-        </tr>
-        {% endfor %}
-        {% endfor %}
-        {% endfor %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
 </div>
 </div>
 <script>
