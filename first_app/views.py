@@ -124,7 +124,7 @@ def resultsearchrule(request, id=None):
             my_file_source = os.path.join(my_folder, file_name+'.csv')
             with open(my_file_source, 'w', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(["Configuration","Rule Type delete", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
+                writer.writerow(["Configuration","Rule Type delete", "Device", "Policy/Term name","application","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
                 for filename in response_data['result']:
                     for dict_rule in response_data['result'][filename]:
                         for rule in  response_data['result'][filename][dict_rule]:
@@ -133,12 +133,13 @@ def resultsearchrule(request, id=None):
                             rule_type_delete = dict_rule
                             device = filename
                             term_name = rule_detail['term']
+                            application = rule_detail['application']
                             protocol = rule_detail['protocol']
                             source_vlan = rule_detail['fzone']
                             dest_vlan = rule_detail['tzone']
                             source_port = rule_detail['sourceport']
                             dest_port = rule_detail['destport']
-                            writer.writerow([conf,rule_type_delete,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
+                            writer.writerow([conf,rule_type_delete,device,term_name,application,protocol,source_vlan,dest_vlan,source_port,dest_port])
             my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
             shutil.move(my_file_source, my_file_dest)
             return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})    
@@ -226,7 +227,7 @@ def result_parse_firewall(request, id=None):
         my_file_source = os.path.join(my_folder, file_name+'.csv')
         with open(my_file_source, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Configuration", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
+            writer.writerow(["Configuration", "Device", "Policy/Term name","Application","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
             for filename in response_data['result']:
                 for dict_rule in response_data['result'][filename]:
                     for rule in  response_data['result'][filename][dict_rule]:
@@ -234,12 +235,13 @@ def result_parse_firewall(request, id=None):
                         conf = rule_detail['config']
                         device = filename
                         term_name = rule_detail['term']
+                        application = rule_detail['application']
                         protocol = rule_detail['protocol']
                         source_vlan = rule_detail['fzone']
                         dest_vlan = rule_detail['tzone']
                         source_port = rule_detail['sourceport']
                         dest_port = rule_detail['destport']
-                        writer.writerow([conf,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
+                        writer.writerow([conf,device,term_name,application,protocol,source_vlan,dest_vlan,source_port,dest_port])
         my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
         shutil.move(my_file_source, my_file_dest)
         #print("====++++++++++++++++++++",response_data['result'])

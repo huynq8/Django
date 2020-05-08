@@ -269,6 +269,7 @@ def search_rule(file_name,file,list_ip):
                 policy['protocol']="\n".join(policy['protocol'])
                 policy['sourceport']="\n".join(policy['sourceport'])
                 policy['destport']="\n".join(policy['destport'])
+                policy['application']="\n".join(policy['application'])
     #print(dict_rule)
     return dict_result
     #B3: export result
@@ -290,4 +291,5 @@ def parse_rule(file_name, file):
                 policy['protocol']="\n".join(policy['protocol'])
                 policy['sourceport']="\n".join(policy['sourceport'])
                 policy['destport']="\n".join(policy['destport'])
+                policy['application']="\n".join(policy['application'])
     return dict_result

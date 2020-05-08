@@ -15,11 +15,11 @@
                 configuration only</button>
             <button name="generate-command" type="submit" class="btn btn-success" id="display">Display all
                 ticket</button>
-            </h2>
-            <h2>
+        </h2>
+        <h2>
             <a href="{% static filename %}" class="btn btn-secondary" download=filename.csv>Download
                 File</a>
-            </h2>
+        </h2>
     </div>
 </div>
 <div class="row">
@@ -35,6 +35,9 @@
 
                 <th>
                     Policy/Term name
+                </th>
+                <th>
+                    Application(SRX)
                 </th>
                 <th>
                     Protocol
@@ -80,6 +83,9 @@
 
                 <td>
                     {{value2.term}}
+                </td>
+                <td>
+                    {{value2.application}}
                 </td>
                 <td>
                     {{value2.protocol}}
