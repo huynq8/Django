@@ -118,7 +118,8 @@ def resultsearchrule(request, id=None):
                 response_data['result'].update(result_func)
                 #pprint.pprint(response_data)
             dict_file.clear()
-           
+            THIS_FOLDER = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            os.chdir(THIS_FOLDER)
             my_folder = os.getcwd()
             my_file_source = os.path.join(my_folder, file_name+'.csv')
             with open(my_file_source, 'w', newline='') as file:
