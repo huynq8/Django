@@ -118,8 +118,10 @@ def resultsearchrule(request, id=None):
                 response_data['result'].update(result_func)
                 #pprint.pprint(response_data)
             dict_file.clear()
-            THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-            my_file_source = os.path.join(THIS_FOLDER, file_name+'.csv')
+            THIS_FOLDER = os.path.dirname(os.getcwd())
+            #os.chdir(THIS_FOLDER)
+            my_folder = os.getcwd()
+            my_file_source = os.path.join(my_folder, file_name+'.csv')
             with open(my_file_source, 'w', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(["Configuration","Rule Type delete", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
@@ -137,9 +139,9 @@ def resultsearchrule(request, id=None):
                             source_port = rule_detail['sourceport']
                             dest_port = rule_detail['destport']
                             writer.writerow([conf,rule_type_delete,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
-            my_file_dest = os.path.join(THIS_FOLDER, "static",file_name+'.csv')
+            my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
             shutil.move(my_file_source, my_file_dest)
-            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})    
+            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":my_file_dest})    
     return render(request, 'first_app/resultsearchrule.html')
 def regular(request, id=None):
     response_data = {}
@@ -218,8 +220,10 @@ def result_parse_firewall(request, id=None):
             result_func = web.parse_rule(file_name,list_command)
             response_data['result'].update(result_func)
         dict_file.clear()
-        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-        my_file_source = os.path.join(THIS_FOLDER, file_name+'.csv')
+        THIS_FOLDER = os.path.dirname(os.getcwd())
+        #os.chdir(THIS_FOLDER)
+        my_folder = os.getcwd()
+        my_file_source = os.path.join(my_folder, file_name+'.csv')
         with open(my_file_source, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Configuration", "Device", "Policy/Term name","Protocol","Source VLAN","Source IP","Source Port","Dest VLAN","Dest IP","Dest Port"])
@@ -236,10 +240,10 @@ def result_parse_firewall(request, id=None):
                         source_port = rule_detail['sourceport']
                         dest_port = rule_detail['destport']
                         writer.writerow([conf,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
-        my_file_dest = os.path.join(THIS_FOLDER, "static",file_name+'.csv')
+        my_file_dest = os.path.join(my_folder, "static","files",file_name+'.csv')
         shutil.move(my_file_source, my_file_dest)
         #print("====++++++++++++++++++++",response_data['result'])
-        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result']),"filename":file_name+".csv"})
+        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result']),"filename":my_file_dest})
     return render(request, 'first_app/result_parse_firewall.html')
     # do something
      
