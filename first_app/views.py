@@ -141,7 +141,7 @@ def resultsearchrule(request, id=None):
                             writer.writerow([conf,rule_type_delete,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
             my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
             shutil.move(my_file_source, my_file_dest)
-            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":my_file_dest})    
+            return render(request, 'first_app/resultsearchrule.html',context={"result":dict(response_data['result']),"filename":file_name})    
     return render(request, 'first_app/resultsearchrule.html')
 def regular(request, id=None):
     response_data = {}
@@ -240,10 +240,10 @@ def result_parse_firewall(request, id=None):
                         source_port = rule_detail['sourceport']
                         dest_port = rule_detail['destport']
                         writer.writerow([conf,device,term_name,protocol,source_vlan,dest_vlan,source_port,dest_port])
-        my_file_dest = os.path.join(my_folder, "static","files",file_name+'.csv')
+        my_file_dest = os.path.join(my_folder, "static",file_name+'.csv')
         shutil.move(my_file_source, my_file_dest)
         #print("====++++++++++++++++++++",response_data['result'])
-        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result']),"filename":my_file_dest})
+        return render(request, 'first_app/result_parse_firewall.html',context={"result":dict(response_data['result']),"filename":file_name})
     return render(request, 'first_app/result_parse_firewall.html')
     # do something
      
