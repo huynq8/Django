@@ -27,7 +27,7 @@ SECRET_KEY = '(+!s)o06k(=v3-u8tl_$)i5_rh4m8+w-8g867o8p0!yv+6+v!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["junos126.pythonanywhere.com","116.111.14.165","192.168.1.4","localhost"]
+ALLOWED_HOSTS = ["junos126.pythonanywhere.com","junos126.herokuapp.com","116.111.14.165","192.168.1.4","localhost"]
 
 
 # Application definition
