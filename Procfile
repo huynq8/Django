@@ -1,0 +1,1 @@
+web: gunicorn DJANGO_NGUYENQUOCHUY.wsgi --log-file -
