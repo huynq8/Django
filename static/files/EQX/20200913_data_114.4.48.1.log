@@ -1,0 +1,66 @@
+13-09-2020_21.46.24: ================================================================================
+13-09-2020_21.46.24: check 114.4.48.1:0 status fail (result check port ) 
+13-09-2020_21.46.24: result PING 114.4.48.1
+PING 114.4.48.1 (114.4.48.1) 56(84) bytes of data.
+64 bytes from 114.4.48.1: icmp_seq=1 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=2 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=3 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=4 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=5 ttl=60 time=12.0 ms
+
+--- 114.4.48.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4012ms
+rtt min/avg/max/mdev = 12.000/12.027/12.058/0.023 ms
+13-09-2020_21.46.29: ------------------
+13-09-2020_21.46.29: result traceroute ICMP 114.4.48.1
+traceroute to 114.4.48.1 (114.4.48.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.459 ms  0.431 ms  0.429 ms
+ 2  * * *
+ 3  27.111.228.247  1.253 ms  1.265 ms  1.264 ms
+ 4  114.4.19.82  11.945 ms  11.957 ms  11.956 ms
+ 5  114.4.48.1  12.252 ms  12.256 ms  12.254 ms
+13-09-2020_21.46.34: ================================================================================
+13-09-2020_22.07.27: ================================================================================
+13-09-2020_22.07.27: check 114.4.48.1:0 status fail (result check port ) 
+13-09-2020_22.07.27: result PING 114.4.48.1
+PING 114.4.48.1 (114.4.48.1) 56(84) bytes of data.
+64 bytes from 114.4.48.1: icmp_seq=1 ttl=60 time=12.1 ms
+64 bytes from 114.4.48.1: icmp_seq=2 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=3 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=4 ttl=60 time=12.1 ms
+64 bytes from 114.4.48.1: icmp_seq=5 ttl=60 time=12.0 ms
+
+--- 114.4.48.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4017ms
+rtt min/avg/max/mdev = 12.003/12.057/12.114/0.128 ms
+13-09-2020_22.07.31: ------------------
+13-09-2020_22.07.31: result traceroute ICMP 114.4.48.1
+traceroute to 114.4.48.1 (114.4.48.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.381 ms  0.352 ms  0.346 ms
+ 2  * * *
+ 3  27.111.228.247  1.071 ms  1.135 ms  1.135 ms
+ 4  114.4.19.82  11.895 ms  11.902 ms  11.910 ms
+ 5  114.4.48.1  12.208 ms  12.207 ms  12.202 ms
+13-09-2020_22.07.36: ================================================================================
+13-09-2020_23.07.27: ================================================================================
+13-09-2020_23.07.27: check 114.4.48.1:0 status fail (result check port ) 
+13-09-2020_23.07.27: result PING 114.4.48.1
+PING 114.4.48.1 (114.4.48.1) 56(84) bytes of data.
+64 bytes from 114.4.48.1: icmp_seq=1 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=2 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=3 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=4 ttl=60 time=12.0 ms
+64 bytes from 114.4.48.1: icmp_seq=5 ttl=60 time=12.0 ms
+
+--- 114.4.48.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4016ms
+rtt min/avg/max/mdev = 12.012/12.068/12.097/0.102 ms
+13-09-2020_23.07.31: ------------------
+13-09-2020_23.07.31: result traceroute ICMP 114.4.48.1
+traceroute to 114.4.48.1 (114.4.48.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.350 ms  0.308 ms  0.305 ms
+ 2  * * *
+ 3  27.111.228.247  0.972 ms  0.978 ms  0.996 ms
+ 4  114.4.19.82  11.883 ms  11.893 ms  11.893 ms
+ 5  114.4.48.1  12.117 ms  12.121 ms  12.119 ms
+13-09-2020_23.07.36: ================================================================================

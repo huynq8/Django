@@ -1,0 +1,136 @@
+{% extends "first_app/base.html" %}
+{% block block_body %}
+{% load static %}
+<!-- sử dụng Shift+Alt+F để format lại toàn bộ html  
+ Ctrl+K Ctrl+F  để format selected text-->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<div style=" margin-bottom: 30px;">
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">PING LATENCY EQX</h2>
+</div>
+
+<div style="margin-left: 250px;" class="container-fluid">
+    <div id="container" class="row">
+        <div class="col-8" id="container">
+            <a id="pickfiles" class="btn btn-success" href="javascript:;">Load file ...</a>
+            <a type="button" class="btn btn-primary" id="uploadfiles" href="javascript:;">Start Upload</a>
+            <button name="generate-command" style="display:none" type="button" class="btn btn-success"
+                id="generate">SUBMIT</button>
+        </div>
+    </div>
+    <div class="list-group" id="filelist">
+    </div>
+    <div style="display:none" id="information" class="list-group">
+        <p>Xin Hãy đợi trong 3s sau đó hãy Submit</p>
+    </div>
+    <div style="display:none" id="progress" class="list-group">
+        <p>Xin Hãy đợi kết quả!</p>
+    </div>
+    <div id="divoutput"></div>
+    
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{% static 'js/plupload.full.min.js' %}"></script>
+<script type="text/javascript">
+    var quill = new Quill('#content', {
+        theme: 'snow'
+    });
+    // Custom example logic
+    var uploader = new plupload.Uploader({
+        headers: { "X-CSRFToken": $.cookie("csrftoken") },
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'pickfiles', // you can pass an id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        //url: '{% url "tool" "searchrule" %}',
+        url: '{% url "tool" "result_ping_latency" %}',
+        flash_swf_url: "{% static 'js/Moxie.swf' %}",
+        silverlight_xap_url: "{% static '/js/Moxie.xap' %}",
+
+        filters: {
+            max_file_size: '100mb',
+            mime_types: [
+                { title: "Image files", extensions: "log,txt" },
+                { title: "Zip files", extensions: "zip" }
+            ]
+        },
+
+        init: {
+            PostInit: function () {
+                document.getElementById('filelist').innerHTML = '';
+
+                document.getElementById('uploadfiles').onclick = function () {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            FilesAdded: function (up, files) {
+                plupload.each(files, function (file) {
+                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                });
+            },
+
+            UploadProgress: function (up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                if (screen.width >= 800) {
+                    $("#information").css({ "display": "inline-block" });
+                    console.log('ready')
+                    }
+                $(document).ready(function(){
+                    setTimeout(function () {
+                        $("#generate").css({ "display": "inline-block" })
+                    }, 3000)});
+
+            },
+
+            Error: function (up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            }
+        }
+    });
+
+    uploader.init();
+
+    $(document).ready(function () {
+        $("#reset").click(function (e) {
+            $('#content').val("");
+            $('#divoutput').empty();
+            $('#FileID').val("");
+            $('#filelist').empty();
+        });
+        // select file from ftp server
+
+        $("#generate").click(function (e) {
+            console.log("OK")
+            event.preventDefault();
+            $('#divoutput').empty();
+            $("#information").css({ "display": "none" });
+            $("#progress").css({ "display": "inline-block" });
+            $.ajax({
+                type: 'POST',
+                //url: '{% url "tool" "searchrule" %}',
+                url: '{% url "tool" "result_ping_latency" %}',
+                data: {
+                    content: $('#content').val(), filename: $('#file').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                //$(selector).post(URL,data,function(data,status,xhr),dataType)
+                success: function (json) {
+                    //$("#output").text(json.result)
+                    //$("#divoutput").get("campus.html");
+                    $("#divoutput").append(json);
+                    console.log("ok")
+
+                },
+
+
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        });
+    })
+
+</script>
+
+{% endblock %}

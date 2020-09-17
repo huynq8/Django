@@ -1,0 +1,24 @@
+12-09-2020_13.06.00: ================================================================================
+12-09-2020_13.06.00: check 121.96.0.1:0 status fail (result check port ) 
+12-09-2020_13.06.00: result PING 121.96.0.1
+PING 121.96.0.1 (121.96.0.1) 56(84) bytes of data.
+64 bytes from 121.96.0.1: icmp_seq=1 ttl=248 time=185 ms
+64 bytes from 121.96.0.1: icmp_seq=2 ttl=248 time=185 ms
+64 bytes from 121.96.0.1: icmp_seq=3 ttl=248 time=185 ms
+64 bytes from 121.96.0.1: icmp_seq=4 ttl=248 time=185 ms
+64 bytes from 121.96.0.1: icmp_seq=5 ttl=248 time=185 ms
+
+--- 121.96.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4192ms
+rtt min/avg/max/mdev = 185.554/185.670/185.759/0.392 ms
+12-09-2020_13.06.04: ------------------
+12-09-2020_13.06.04: result traceroute ICMP 121.96.0.1
+traceroute to 121.96.0.1 (121.96.0.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.447 ms  0.417 ms  0.414 ms
+ 2  * * *
+ 3  * * *
+ 4  202.78.70.18  47.858 ms  48.029 ms  48.165 ms
+ 5  202.78.70.10  47.874 ms  47.875 ms  47.937 ms
+ 6  202.78.97.193  284.225 ms  283.814 ms  283.788 ms
+ 7  121.96.0.1  185.492 ms  186.173 ms  186.156 ms
+12-09-2020_13.06.09: ================================================================================

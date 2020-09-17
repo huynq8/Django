@@ -1,0 +1,69 @@
+13-09-2020_21.47.19: ================================================================================
+13-09-2020_21.47.19: check 203.177.128.1:0 status fail (result check port ) 
+13-09-2020_21.47.19: result PING 203.177.128.1
+PING 203.177.128.1 (203.177.128.1) 56(84) bytes of data.
+64 bytes from 203.177.128.1: icmp_seq=1 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=2 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=3 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=4 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=5 ttl=249 time=48.5 ms
+
+--- 203.177.128.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4055ms
+rtt min/avg/max/mdev = 48.596/48.635/48.660/0.141 ms
+13-09-2020_21.47.23: ------------------
+13-09-2020_21.47.23: result traceroute ICMP 203.177.128.1
+traceroute to 203.177.128.1 (203.177.128.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.325 ms  0.336 ms  0.332 ms
+ 2  * * *
+ 3  27.111.228.226  1.381 ms  1.386 ms  1.424 ms
+ 4  120.28.9.109  41.551 ms  41.568 ms  41.564 ms
+ 5  * * *
+ 6  203.177.128.1  48.741 ms  48.619 ms  48.593 ms
+13-09-2020_21.47.28: ================================================================================
+13-09-2020_22.08.21: ================================================================================
+13-09-2020_22.08.21: check 203.177.128.1:0 status fail (result check port ) 
+13-09-2020_22.08.21: result PING 203.177.128.1
+PING 203.177.128.1 (203.177.128.1) 56(84) bytes of data.
+64 bytes from 203.177.128.1: icmp_seq=1 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=2 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=3 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=4 ttl=249 time=48.6 ms
+64 bytes from 203.177.128.1: icmp_seq=5 ttl=249 time=48.6 ms
+
+--- 203.177.128.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4055ms
+rtt min/avg/max/mdev = 48.643/48.660/48.670/0.197 ms
+13-09-2020_22.08.25: ------------------
+13-09-2020_22.08.25: result traceroute ICMP 203.177.128.1
+traceroute to 203.177.128.1 (203.177.128.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.400 ms  0.371 ms  0.368 ms
+ 2  * * *
+ 3  27.111.228.226  1.490 ms  1.502 ms  1.501 ms
+ 4  120.28.9.109  41.493 ms  41.504 ms  41.502 ms
+ 5  * * *
+ 6  203.177.128.1  48.697 ms  48.548 ms  48.507 ms
+13-09-2020_22.08.30: ================================================================================
+13-09-2020_23.08.21: ================================================================================
+13-09-2020_23.08.21: check 203.177.128.1:0 status fail (result check port ) 
+13-09-2020_23.08.21: result PING 203.177.128.1
+PING 203.177.128.1 (203.177.128.1) 56(84) bytes of data.
+64 bytes from 203.177.128.1: icmp_seq=1 ttl=249 time=49.9 ms
+64 bytes from 203.177.128.1: icmp_seq=2 ttl=249 time=50.0 ms
+64 bytes from 203.177.128.1: icmp_seq=3 ttl=249 time=50.0 ms
+64 bytes from 203.177.128.1: icmp_seq=4 ttl=249 time=50.0 ms
+64 bytes from 203.177.128.1: icmp_seq=5 ttl=249 time=50.0 ms
+
+--- 203.177.128.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4054ms
+rtt min/avg/max/mdev = 49.967/50.017/50.058/0.144 ms
+13-09-2020_23.08.25: ------------------
+13-09-2020_23.08.25: result traceroute ICMP 203.177.128.1
+traceroute to 203.177.128.1 (203.177.128.1), 30 hops max, 60 byte packets
+ 1  103.77.131.129  0.388 ms  0.360 ms  0.357 ms
+ 2  * * *
+ 3  27.111.228.226  1.836 ms  1.850 ms  1.849 ms
+ 4  * * *
+ 5  * * *
+ 6  203.177.128.1  50.104 ms  49.942 ms  49.902 ms
+13-09-2020_23.08.30: ================================================================================
